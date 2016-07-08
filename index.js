@@ -21,11 +21,14 @@ import "./app/css/style.css";
 
 // components
 import { NavBar } from "./app/components/navbar/navbar";
+import { Login } from "./app/components/auth/login";
+import { Rules } from "./app/components/rules/rules";
+import { Prizes } from "./app/components/prizes/prizes";
 
-// import { Container } from './app/components/grid/grid';
+import { Container } from './app/components/grid/grid';
 
 // actions
-// import { load } from './app/actions/actions.js';
+import { checkAuth } from './app/actions/actions';
 
 
 class Main extends React.Component {
@@ -35,17 +38,23 @@ class Main extends React.Component {
 }
 
 class App extends React.Component {
+  componentDidMount() {
+    this.props.dispatch(checkAuth());
+  }
   render() {
     // clone state and dispatch to child component props
     let elements;
     if(this.props.children) {
       elements = React.cloneElement(this.props.children, { state: this.props.state, dispatch: this.props.dispatch })
     }
+    console.log(this.props.state)
     return (
       <MuiThemeProvider>
         <span>
-          <NavBar/>
-          {elements}
+          <NavBar state={this.props.state} dispatch={this.props.dispatch} />
+          <Container>
+            {elements}
+          </Container>
         </span>
       </MuiThemeProvider>
     )
@@ -71,6 +80,9 @@ ReactDOM.render(
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer}>
         <IndexRoute component={Main} />
+        <Route path="login" component={Login} />
+        <Route path="rules" component={Rules} />
+        <Route path="prizes" component={Prizes} />
       </Route>
     </Router>
   </Provider>,
