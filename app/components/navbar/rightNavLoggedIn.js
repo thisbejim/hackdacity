@@ -1,5 +1,8 @@
 import React from 'react';
 
+// react-router
+import { browserHistory } from 'react-router';
+
 // material-ui
 import { FlatButton, IconButton, IconMenu, MenuItem } from 'material-ui';
 import { NavigationMoreVert } from 'material-ui/svg-icons';
@@ -11,6 +14,7 @@ export class RightNavLoggedIn extends React.Component {
   render() {
     return (
       <span>
+        <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin') }/>
         <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules') }/>
         <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes') }/>
           <IconMenu

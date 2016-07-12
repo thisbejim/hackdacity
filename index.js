@@ -24,6 +24,8 @@ import { NavBar } from "./app/components/navbar/navbar";
 import { Login } from "./app/components/auth/login";
 import { Rules } from "./app/components/rules/rules";
 import { Prizes } from "./app/components/prizes/prizes";
+import { Admin } from "./app/components/admin/admin";
+
 
 import { Container } from './app/components/grid/grid';
 
@@ -83,6 +85,7 @@ ReactDOM.render(
         <Route path="login" component={Login} />
         <Route path="rules" component={Rules} />
         <Route path="prizes" component={Prizes} />
+        <Route path="admin" component={Admin} />
       </Route>
     </Router>
   </Provider>,
