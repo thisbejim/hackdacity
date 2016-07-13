@@ -1,5 +1,5 @@
 module.exports = {
-    entry: ['babel-polyfill', "./index.js"],
+    entry: ["babel-polyfill", "whatwg-fetch", "./index.js"],
     output: {
         path: __dirname,
         filename: "bundle.js",

@@ -1,3 +1,5 @@
+// fetch
+import 'whatwg-fetch';
 // react-router
 import { browserHistory } from 'react-router'
 
@@ -23,13 +25,15 @@ const firebaseError = (error) => {
 // Authentication
 export const checkAuth = () => {
   return dispatch => {
-    const user = auth.currentUser;
-    console.log(user)
-    if (user) {
-      // User is signed in.
-      console.log(user)
-      dispatch(signedIn());
-    }
+    dispatch(navBarLoadingOn());
+    auth.onAuthStateChanged((user) => {
+      dispatch(navBarLoadingOff());
+      if (user) {
+        // User is signed in.
+        console.log(user)
+        dispatch(signedIn());
+      }
+    });
   }
 }
 
@@ -93,7 +97,26 @@ export const signOut = () => {
 }
 
 
-// admin
+// Admin
+
+export const invalidApplicant = (user_id) => {
+  return async(dispatch) => {
+    await database.ref("applied").child(user_id).remove();
+  }
+}
+
+export const validApplicant = (user_id, email, token) => {
+  return async(dispatch) => {
+    try {
+      await database.ref("alumni").child(user_id).set(true);
+      await database.ref("applied").child(user_id).remove();
+      await addUserToSlack(email, token);
+    } catch(e) {
+      console.log(e)
+    }
+  }
+}
+
 const addApplicants = (applicants) => {
   return {
     type: "ADD_APPLICANTS",
@@ -102,17 +125,60 @@ const addApplicants = (applicants) => {
 }
 
 export const getApplicants = () => {
-  return async(dispatch) => {
-    try {
-      const snapshot = await database.ref("applied").once('value');
+  return dispatch => {
+    dispatch(navBarLoadingOn());
+    database.ref("applied").on('value', (snapshot) => {
       const applicants = [];
       snapshot.forEach((data) => {
         applicants.push(data.val());
       });
-      console.log(applicants)
-      dispatch(addApplicants(applicants))
-    } catch(e) {
-      console.log(e)
-    }
+      dispatch(navBarLoadingOff());
+      dispatch(addApplicants(applicants));
+    });
+  }
+}
+
+export const detachApplicantListener = () => {
+  return dispatch => {
+    database.ref("applied").off('value');
+  }
+}
+
+
+// slack
+const addUserToSlack = async(email, token) => {
+  const formData = new FormData();
+  formData.append('email', email);
+  formData.append('token', token);
+  const response = await fetch('https://slack.com/api/users.admin.invite', {
+    method: 'POST',
+    body: formData
+  });
+}
+
+const updateSlackCredentials = (token) => {
+  return {
+    type: "UPDATE_SLACK_CREDENTIALS",
+    token: token
+  }
+}
+
+export const getSlackCredentials = () => {
+  return async(dispatch) => {
+    const slack = await database.ref("slack").once('value');
+    dispatch(updateSlackCredentials(slack.val().token));
+  }
+}
+
+// navbar
+const navBarLoadingOn = () => {
+  return {
+    type: "NAVBAR_LOADING_ON"
+  }
+}
+
+const navBarLoadingOff = () => {
+  return {
+    type: "NAVBAR_LOADING_OFF"
   }
 }

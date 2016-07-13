@@ -3,7 +3,8 @@ import React from 'react';
 // material-ui
 import {
   AppBar, FlatButton, FontIcon,
-  IconButton, IconMenu, MenuItem
+  IconButton, IconMenu, MenuItem,
+  LinearProgress
 } from 'material-ui';
 import { NavigationMoreVert } from 'material-ui/svg-icons';
 import { grey200 } from 'material-ui/styles/colors';
@@ -17,10 +18,15 @@ export class NavBar extends React.Component {
   render() {
     const dispatch = this.props.dispatch;
     const user = this.props.state.user;
+    const navbar = this.props.state.navbar;
 
     const rightNav = user.signedIn
       ? <RightNavLoggedIn dispatch={dispatch} />
       : <RightNavLoggedOut dispatch={dispatch}/ >;
+
+    const loader = navbar.loading
+      ? <LinearProgress mode="indeterminate" style={{borderRadius: 0}}/>
+      : <div style={{height: 4}}></div>;
 
     return (
       <span>
@@ -29,6 +35,7 @@ export class NavBar extends React.Component {
           iconElementRight={rightNav}
           iconStyleRight={style.icon}
         />
+        {loader}
         <SignInDialog state={this.props.state} dispatch={dispatch} />
       </span>
     )
