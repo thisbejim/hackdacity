@@ -3,8 +3,7 @@ import React from 'react';
 // components
 import { Row, Column } from '../grid/grid';
 
-export class Rules extends React.Component {
-  render() {
+export const Rules = (props) => {
     return (
       <Row>
         <Column md={3}> </Column>
@@ -62,5 +61,4 @@ export class Rules extends React.Component {
         </Column>
       </Row>
     )
-  }
 }

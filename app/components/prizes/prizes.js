@@ -6,8 +6,7 @@ import { List, ListItem, Subheader, Divider, Avatar } from 'material-ui';
 // components
 import { Row, Column } from '../grid/grid';
 
-export class Prizes extends React.Component {
-  render() {
+export const Prizes = (props) => {
     return (
       <Row>
         <Column md={3}> </Column>
@@ -79,5 +78,4 @@ export class Prizes extends React.Component {
         </Column>
       </Row>
     )
-  }
 }

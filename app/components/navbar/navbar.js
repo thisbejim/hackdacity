@@ -14,11 +14,10 @@ import { RightNavLoggedIn } from "./rightNavLoggedIn";
 import { RightNavLoggedOut } from "./rightNavLoggedOut";
 import { AuthDialog } from "./authDialog";
 
-export class NavBar extends React.Component {
-  render() {
-    const dispatch = this.props.dispatch;
-    const user = this.props.state.user;
-    const navbar = this.props.state.navbar;
+export const NavBar = (props) => {
+    const dispatch = props.dispatch;
+    const user = props.state.user;
+    const navbar = props.state.navbar;
 
     const rightNav = user.signedIn
       ? <RightNavLoggedIn dispatch={dispatch} />
@@ -39,7 +38,7 @@ export class NavBar extends React.Component {
           style={style.appBar}
         />
         {loader}
-        <AuthDialog state={this.props.state} dispatch={dispatch} />
+        <AuthDialog state={props.state} dispatch={dispatch} />
         <Snackbar
           open={true}
           message="Your account is awaiting verification"
@@ -47,7 +46,6 @@ export class NavBar extends React.Component {
         />
       </span>
     )
-  }
 }
 
 const style = {

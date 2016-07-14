@@ -13,9 +13,9 @@ import { Row, Column } from '../grid/grid';
 // actions
 import { changeTab } from "../../actions/actions";
 
-export class Submissions extends React.Component {
-  render() {
-    const tab = this.props.state.submissions.tab;
+export const Submissions = (props) => {
+    console.log(props)
+    const tab = props.state.submissions.tab;
 
     const tiles = [
   {
@@ -91,7 +91,7 @@ const styles = {
       <h1>Submissions</h1>
       <Tabs
         value={tab}
-        onChange={(value) => this.props.dispatch(changeTab(value))}
+        onChange={(value) => props.dispatch(changeTab(value))}
         tabItemContainerStyle={{borderTopLeftRadius: 3, borderTopRightRadius: 3}}
       >
         <Tab label="Crowd Favourite" value="a">
@@ -131,5 +131,4 @@ const styles = {
       </Tabs>
     </span>
     )
-  }
 }

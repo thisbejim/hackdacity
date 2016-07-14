@@ -9,15 +9,13 @@ import { FlatButton } from 'material-ui';
 // actions
 import { toggleAuthDialogOpen } from "../../actions/actions";
 
-export class RightNavLoggedOut extends React.Component {
-  render() {
+export const RightNavLoggedOut = (props) => {
     return (
       <p>
         <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin') }/>
         <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules') }/>
         <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes') }/>
-        <FlatButton label="Sign In" onTouchTap={() => this.props.dispatch(toggleAuthDialogOpen())}/>
+        <FlatButton label="Sign In" onTouchTap={() => props.dispatch(toggleAuthDialogOpen())}/>
       </p>
     )
-  }
 }

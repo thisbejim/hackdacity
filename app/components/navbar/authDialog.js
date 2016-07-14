@@ -9,10 +9,9 @@ import {
 // actions
 import { toggleAuthDialogOpen, toggleAuthPage, signIn, signUp } from "../../actions/actions";
 
-export class AuthDialog extends React.Component {
-  render() {
-    const dispatch = this.props.dispatch;
-    const dialog = this.props.state.dialogs.auth;
+export const AuthDialog = (props) => {
+    const dispatch = props.dispatch;
+    const dialog = props.state.dialogs.auth;
     let email, password, name;
     const loading = dialog.loading ? <LinearProgress mode="indeterminate" /> : null;
 
@@ -113,7 +112,6 @@ export class AuthDialog extends React.Component {
         </Dialog>
       </div>
     )
-  }
 }
 
 const style = {

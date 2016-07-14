@@ -4,17 +4,15 @@ import styles from './grid.css';
 
 import classNames from 'classnames';
 
-export class Column extends React.Component {
-  render() {
-    const columnClass = classNames(styles["colLg"+this.props.lg],
-    styles["colMd"+this.props.md], styles["colSm"+this.props.sm],
-    styles["colXs"+this.props.xs]);
+export const Column = (props) => {
+    const columnClass = classNames(styles["colLg"+props.lg],
+    styles["colMd"+props.md], styles["colSm"+props.sm],
+    styles["colXs"+props.xs]);
     return (
       <div className={columnClass}>
-        {this.props.children}
+        {props.children}
       </div>
     )
-  }
 }
 Column.propTypes = {
   lg: React.PropTypes.number,

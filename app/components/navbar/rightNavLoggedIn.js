@@ -10,8 +10,7 @@ import { NavigationMoreVert } from 'material-ui/svg-icons';
 // actions
 import { signOut } from "../../actions/actions";
 
-export class RightNavLoggedIn extends React.Component {
-  render() {
+export const RightNavLoggedIn = (props) => {
     return (
       <span>
         <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin') }/>
@@ -27,11 +26,10 @@ export class RightNavLoggedIn extends React.Component {
             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
           >
             <MenuItem primaryText="Help" />
-            <MenuItem primaryText="Sign out" onTouchTap={() => this.props.dispatch(signOut())}/>
+            <MenuItem primaryText="Sign out" onTouchTap={() => props.dispatch(signOut())}/>
           </IconMenu>
       </span>
     )
-  }
 }
 
 const style = {
