@@ -17,8 +17,8 @@ import {
 export class Admin extends React.Component {
   componentDidMount() {
     const dispatch = this.props.dispatch;
-    dispatch(getApplicants());
     dispatch(getSlackCredentials());
+    dispatch(getApplicants());
   }
   componentWillUnmount() {
     this.props.dispatch(detachApplicantListener());

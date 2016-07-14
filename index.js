@@ -25,19 +25,12 @@ import { Login } from "./app/components/auth/login";
 import { Rules } from "./app/components/rules/rules";
 import { Prizes } from "./app/components/prizes/prizes";
 import { Admin } from "./app/components/admin/admin";
-
-
+import { Submissions } from "./app/components/submissions/submissions";
+// grid
 import { Container } from './app/components/grid/grid';
 
 // actions
 import { checkAuth } from './app/actions/actions';
-
-
-class Main extends React.Component {
-  render() {
-    return <h1>hello</h1>;
-  }
-}
 
 class App extends React.Component {
   componentDidMount() {
@@ -81,7 +74,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer}>
-        <IndexRoute component={Main} />
+        <IndexRoute component={Submissions} />
         <Route path="login" component={Login} />
         <Route path="rules" component={Rules} />
         <Route path="prizes" component={Prizes} />

@@ -3,10 +3,12 @@ import { user } from './user';
 import { dialogs } from './dialogs';
 import { admin } from './admin';
 import { navbar } from './navbar';
+import { submissions } from './submissions';
 
 export const reducer = combineReducers({
   user,
   dialogs,
   admin,
-  navbar
+  navbar,
+  submissions
 });

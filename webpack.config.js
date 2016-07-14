@@ -11,7 +11,7 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
-            { test: /\.css$/, exclude: /node_modules/, loader: 'style!css-loader?modules'}
+            { test: /\.css$/, exclude: /node_modules/, loader: 'style!css-loader?modules&camelCase'}
         ]
     }
 };

@@ -7,7 +7,7 @@ import { browserHistory } from 'react-router';
 import { FlatButton } from 'material-ui';
 
 // actions
-import { toggleSignInDialogOpen } from "../../actions/actions";
+import { toggleAuthDialogOpen } from "../../actions/actions";
 
 export class RightNavLoggedOut extends React.Component {
   render() {
@@ -16,7 +16,7 @@ export class RightNavLoggedOut extends React.Component {
         <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin') }/>
         <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules') }/>
         <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes') }/>
-        <FlatButton label="Sign In" onTouchTap={() => this.props.dispatch(toggleSignInDialogOpen())}/>
+        <FlatButton label="Sign In" onTouchTap={() => this.props.dispatch(toggleAuthDialogOpen())}/>
       </p>
     )
   }

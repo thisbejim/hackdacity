@@ -18,11 +18,24 @@ const database = firebase.database();
 const firebaseError = (error) => {
   switch(error.code) {
     case "auth/user-not-found":
-      return "You did not enter a valid Hackdacity account"
+      return "You did not enter a valid Hackdacity account."
   }
 }
 
-// Authentication
+// Navbar
+const navBarLoadingOn = () => {
+  return {
+    type: "NAVBAR_LOADING_ON"
+  }
+}
+
+const navBarLoadingOff = () => {
+  return {
+    type: "NAVBAR_LOADING_OFF"
+  }
+}
+
+// Authentication handler
 export const checkAuth = () => {
   return dispatch => {
     dispatch(navBarLoadingOn());
@@ -37,23 +50,35 @@ export const checkAuth = () => {
   }
 }
 
-
-// Sign in
 export const signedIn = () => {
   return {
     type: "SIGNED_IN"
   }
 }
 
-export const toggleSignInDialogOpen = () => {
+// auth modal
+export const toggleAuthDialogOpen = () => {
   return {
-    type: "TOGGLE_SIGN_IN_DIALOG_OPEN"
+    type: "TOGGLE_AUTH_DIALOG_OPEN"
   }
 }
 
-export const startSignIn = () => {
+const authDialogLoadingOn = () => {
   return {
-    type: "START_SIGN_IN"
+    type: "AUTH_MODAL_LOADING_ON"
+  }
+}
+
+const authDialogLoadingOff = () => {
+  return {
+    type: "AUTH_MODAL_LOADING_OFF"
+  }
+}
+
+// Sign in
+export const toggleAuthPage = () => {
+  return {
+    type: "TOGGLE_AUTH_PAGE"
   }
 }
 
@@ -68,18 +93,42 @@ export const signIn = (email, password) => {
   console.log("sign in called", email, password)
   return async(dispatch) => {
     try {
-      dispatch(startSignIn());
+      dispatch(authDialogLoadingOn());
       await auth.signInWithEmailAndPassword(email, password);
-      dispatch(signedIn());
-      dispatch(toggleSignInDialogOpen());
+      dispatch(toggleAuthDialogOpen());
     } catch(e) {
       dispatch(signInError(firebaseError(e)));
     }
   }
 }
 
+// sign up
+
+export const signUp = (name, email, password) => {
+  console.log("sign up called", name, email, password)
+  return async(dispatch) => {
+    try {
+      dispatch(authDialogLoadingOn());
+      const user = await auth.createUserWithEmailAndPassword(email, password);
+      await user.updateProfile({displayName: name});
+      const uid = user.uid;
+      // add
+      await database.ref("applied").child(uid).set({
+        id: uid,
+        name: name,
+        email: email,
+        date: new Date().getTime()
+      });
+      dispatch(toggleAuthDialogOpen());
+    } catch(e) {
+      dispatch(signInError(firebaseError(e)));
+    }
+  }
+}
+
+
 // Sign out
-export const signedOut = () => {
+const signedOut = () => {
   return {
     type: "SIGNED_OUT"
   }
@@ -98,7 +147,6 @@ export const signOut = () => {
 
 
 // Admin
-
 export const invalidApplicant = (user_id) => {
   return async(dispatch) => {
     await database.ref("applied").child(user_id).remove();
@@ -127,7 +175,7 @@ const addApplicants = (applicants) => {
 export const getApplicants = () => {
   return dispatch => {
     dispatch(navBarLoadingOn());
-    database.ref("applied").on('value', (snapshot) => {
+    database.ref("applied").orderByChild("date").on('value', (snapshot) => {
       const applicants = [];
       snapshot.forEach((data) => {
         applicants.push(data.val());
@@ -145,7 +193,7 @@ export const detachApplicantListener = () => {
 }
 
 
-// slack
+// Slack
 const addUserToSlack = async(email, token) => {
   const formData = new FormData();
   formData.append('email', email);
@@ -170,15 +218,11 @@ export const getSlackCredentials = () => {
   }
 }
 
-// navbar
-const navBarLoadingOn = () => {
-  return {
-    type: "NAVBAR_LOADING_ON"
-  }
-}
 
-const navBarLoadingOff = () => {
+// submissions
+export const changeTab = (tab) => {
   return {
-    type: "NAVBAR_LOADING_OFF"
+    type: "CHANGE_TAB",
+    tab: tab
   }
 }
