@@ -62,6 +62,7 @@ export const Submissions = (props) => {
       title={tile.title}
 
     />
+  
   <CardMedia mediaStyle={{height: 200, overflow: "hidden"}} >
             <img src={tile.img} />
           </CardMedia>
