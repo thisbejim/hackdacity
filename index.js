@@ -23,7 +23,7 @@ import "./app/css/style.css";
 import { NavBar } from "./app/components/navbar/navbar";
 import { Rules } from "./app/components/rules/rules";
 import { Prizes } from "./app/components/prizes/prizes";
-import { Admin } from "./app/components/admin/admin";
+import { Admin, Dashboard, Approve } from "./app/components/admin/admin";
 import { Submissions } from "./app/components/submissions/submissions";
 // grid
 import { Container } from './app/components/grid/grid';
@@ -41,7 +41,6 @@ class App extends React.Component {
     if(this.props.children) {
       elements = React.cloneElement(this.props.children, { state: this.props.state, dispatch: this.props.dispatch })
     }
-    console.log(this.props.state)
     return (
       <MuiThemeProvider>
         <span>
@@ -76,7 +75,10 @@ ReactDOM.render(
         <IndexRoute component={Submissions} />
         <Route path="rules" component={Rules} />
         <Route path="prizes" component={Prizes} />
-        <Route path="admin" component={Admin} />
+        <Route path="admin" component={Admin}>
+          <Route path="dashboard" component={Dashboard}/>
+          <Route path="approve" component={Approve}/>
+        </Route>
       </Route>
     </Router>
   </Provider>,

@@ -52,20 +52,6 @@ export const Submissions = (props) => {
   },
 ];
 
-const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-  },
-  gridList: {
-    width: "100%",
-    height: "100%",
-    overflowY: 'auto',
-    marginBottom: 24,
-  },
-}
-
     const show = tiles.map((tile, index) => {
 
       return (
@@ -76,7 +62,7 @@ const styles = {
       title={tile.title}
 
     />
-          <CardMedia mediaStyle={{height: 358, overflow: "hidden"}} >
+  <CardMedia mediaStyle={{height: 200, overflow: "hidden"}} >
             <img src={tile.img} />
           </CardMedia>
             <CardActions>

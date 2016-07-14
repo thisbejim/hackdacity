@@ -13,7 +13,7 @@ import { signOut } from "../../actions/actions";
 export const RightNavLoggedIn = (props) => {
     return (
       <span>
-        <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin') }/>
+        <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin/dashboard') }/>
         <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules') }/>
         <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes') }/>
           <IconMenu
