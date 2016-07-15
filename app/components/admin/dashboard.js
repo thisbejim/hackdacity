@@ -1,5 +1,6 @@
 import React from 'react';
-
+// moment
+import moment from 'moment';
 // react-router
 import { browserHistory } from 'react-router';
 
@@ -34,11 +35,8 @@ export class Dashboard extends React.Component {
     });
     let startDate, endDate;
     if(selectedHackathon) {
-      startDate = new Date(selectedHackathon.startDate);
-      startDate.setHours(0, 0, 0, 0);
-
-      endDate = new Date(selectedHackathon.endDate);
-      endDate.setHours(0, 0, 0, 0);
+      startDate = moment.utc(selectedHackathon.startDate).toDate();
+      endDate = moment(selectedHackathon.endDate).toDate();
     }
     console.log(startDate)
     return (
@@ -51,11 +49,11 @@ export class Dashboard extends React.Component {
         <Row>
           <Column md={3} sm={6}>
             <DatePicker disabled={true} value={startDate} floatingLabelText="Start Date"/>
-            <DatePicker disabled={true} value={startDate} hintText="End Date" floatingLabelText="End Date"/>
+            <DatePicker disabled={true} value={startDate} floatingLabelText="End Date"/>
           </Column>
           <Column md={3} sm={6}>
-            <TimePicker disabled={true} hintText="Start Time" floatingLabelText="Start Time"/>
-            <TimePicker disabled={true} hintText="End Time" floatingLabelText="End Time"/>
+            <TimePicker floatingLabelText="Start Time" value={startDate} onChange={(event, date) => console.log(date)}/>
+            <TimePicker disabled={true} floatingLabelText="End Time"/>
           </Column>
         </Row>
         <p>Prizes</p>
