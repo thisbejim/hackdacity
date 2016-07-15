@@ -147,6 +147,8 @@ export const signOut = () => {
 
 
 // Admin
+
+// approve
 export const invalidApplicant = (user_id) => {
   return async(dispatch) => {
     await database.ref("applied").child(user_id).remove();
@@ -192,6 +194,27 @@ export const detachApplicantListener = () => {
   }
 }
 
+// Dashboard
+const addhackathons = (currentHackathon, hackathons) => {
+  return {
+    type: "ADD_HACKATHONS",
+    currentHackathon: currentHackathon,
+    hackathons: hackathons
+  }
+}
+export const getHackathons = () => {
+  return async(dispatch) => {
+    dispatch(navBarLoadingOn());
+    const currentHackathon = await database.ref("currentHackathon").once('value');
+    const hacks = await database.ref("hackathons").once('value');
+    const hackathons = [];
+    hacks.forEach((data) => {
+      hackathons.push(data.val());
+    });
+    dispatch(addhackathons(currentHackathon.val(), hackathons));
+    dispatch(navBarLoadingOff());
+  }
+}
 
 // Slack
 const addUserToSlack = async(email, token) => {

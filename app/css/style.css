@@ -11,6 +11,11 @@ h1 {
   font-size: 56px;
 }
 
+h2 {
+  color: rgba(0,0,0,0.7);
+  font-size: 20px;
+}
+
 p {
   font-size: 16x;
 }
