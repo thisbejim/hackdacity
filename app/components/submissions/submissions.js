@@ -55,14 +55,14 @@ export const Submissions = (props) => {
     const show = tiles.map((tile, index) => {
 
       return (
-        <Column md={4} sm={6}>
+        <Column key={index} md={4} sm={6}>
           <Card style={{marginTop: 15, boxShadow: "rgba(0, 0, 0, 0.117647) 0px 0px 0px, rgba(0, 0, 0, 0.117647) 0px 0px 0px",
           borderWidth: 1, borderColor: "#D8D8D8", borderStyle: "solid"}}>
           <CardHeader
       title={tile.title}
 
     />
-  
+
   <CardMedia mediaStyle={{height: 200, overflow: "hidden"}} >
             <img src={tile.img} />
           </CardMedia>

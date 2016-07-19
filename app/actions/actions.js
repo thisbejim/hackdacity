@@ -158,9 +158,11 @@ export const invalidApplicant = (user_id) => {
 export const validApplicant = (user_id, email, token) => {
   return async(dispatch) => {
     try {
-      await database.ref("alumni").child(user_id).set(true);
-      await database.ref("applied").child(user_id).remove();
-      await addUserToSlack(email, token);
+      await Promise.all([
+        database.ref("alumni").child(user_id).set(true),
+        database.ref("applied").child(user_id).remove(),
+        addUserToSlack(email, token)
+      ]);
     } catch(e) {
       console.log(e)
     }
@@ -178,10 +180,7 @@ export const getApplicants = () => {
   return dispatch => {
     dispatch(navBarLoadingOn());
     database.ref("applied").orderByChild("date").on('value', (snapshot) => {
-      const applicants = [];
-      snapshot.forEach((data) => {
-        applicants.push(data.val());
-      });
+      const applicants = Object.values(snapshot.val());
       dispatch(navBarLoadingOff());
       dispatch(addApplicants(applicants));
     });
@@ -195,24 +194,136 @@ export const detachApplicantListener = () => {
 }
 
 // Dashboard
-const addhackathons = (currentHackathon, hackathons) => {
+const addhackathons = (currentHackathon, hackathons, categories, prizes) => {
   return {
     type: "ADD_HACKATHONS",
     currentHackathon: currentHackathon,
-    hackathons: hackathons
+    hackathons: hackathons,
+    categories: categories,
+    prizes: prizes
   }
 }
+
 export const getHackathons = () => {
   return async(dispatch) => {
     dispatch(navBarLoadingOn());
-    const currentHackathon = await database.ref("currentHackathon").once('value');
-    const hacks = await database.ref("hackathons").once('value');
-    const hackathons = [];
-    hacks.forEach((data) => {
-      hackathons.push(data.val());
-    });
-    dispatch(addhackathons(currentHackathon.val(), hackathons));
+    // fetch in parallel
+    const results = await Promise.all([
+      database.ref("currentHackathon").once('value'),
+      database.ref("hackathons").once('value'),
+      database.ref("categories").once('value'),
+      database.ref("prizes").once('value')
+    ]);
+    // TODO test speed of parallel
+    // console.log(result)
+    // const currentHackathon = await database.ref("currentHackathon").once('value');
+    // console.log("1 fired")
+    // const hackathons = await database.ref("hackathons").once('value');
+    // console.log("2 fired")
+    // const categories = await database.ref("categories").once('value');
+    // console.log("3 fired")
+    // const prizes = await database.ref("prizes").once('value');
+    // console.log("4 fired")
+
+    dispatch(
+      addhackathons(
+        results[0].val(),
+        Object.values(results[1].val()),
+        Object.values(results[2].val()),
+        Object.values(results[3].val())
+      )
+    );
     dispatch(navBarLoadingOff());
+  }
+}
+
+export const toggleEditHackathon = () => {
+  return {
+    type: "TOGGLE_EDIT_HACKATHON"
+  }
+}
+
+export const deletePrize = (id) => {
+  return {
+    type: "DELETE_PRIZE",
+    id: id
+  }
+}
+
+export const addPrize = (categoryId) => {
+  return {
+    type: "ADD_PRIZE",
+    categoryId: categoryId,
+    id: database.ref().push().key
+  }
+}
+
+export const updatePrize = (id, text) => {
+  return {
+    type: "UPDATE_PRIZE",
+    id: id,
+    text: text
+  }
+}
+
+export const updateCategory = (id, name) => {
+  return {
+    type: "UPDATE_CATEGORY",
+    id: id,
+    name: name
+  }
+}
+
+export const addPrizeCategory = (hackId) => {
+  return {
+    type: "ADD_PRIZE_CATEGORY",
+    hackId: hackId,
+    id: database.ref().push().key
+  }
+}
+
+export const deleteCategory = (categoryId) => {
+  return {
+    type: "DELETE_CATEGORY",
+    categoryId: categoryId
+  }
+}
+
+export const updateDate = (id, date, dateType) => {
+  return {
+    type: "UPDATE_DATE",
+    id: id,
+    date: date.getTime(),
+    dateType: dateType
+  }
+}
+export const saveHackathon = (state) => {
+  return async(dispatch) => {
+    // prizes
+    const prizes = state.prizes.reduce((previous, current) => {
+      previous[current.id] = current
+      return previous
+    }, {});
+
+    // prize categories
+    const categories = state.categories.reduce((previous, current) => {
+      previous[current.id] = current
+      return previous
+    }, {});
+
+    // prize hackathons
+    const hackathons = state.hackathons.reduce((previous, current) => {
+      previous[current.id] = current
+      return previous
+    }, {});
+
+    // update firebase
+    await Promise.all([
+      database.ref("hackathons").set(hackathons),
+      database.ref("prizes").set(prizes),
+      database.ref("categories").set(categories)
+    ]);
+    dispatch(toggleEditHackathon())
   }
 }
 
