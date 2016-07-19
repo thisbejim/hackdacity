@@ -4,11 +4,13 @@ import { dialogs } from './dialogs';
 import { admin } from './admin';
 import { navbar } from './navbar';
 import { submissions } from './submissions';
+import { home } from './home';
 
 export const reducer = combineReducers({
   user,
   dialogs,
   admin,
   navbar,
-  submissions
+  submissions,
+  home
 });

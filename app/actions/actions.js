@@ -35,12 +35,20 @@ const navBarLoadingOff = () => {
   }
 }
 
+// Start up
+
+export const startUp = () => {
+  return async(dispatch) => {
+    dispatch(navBarLoadingOn());
+    dispatch(getHackathon())
+    dispatch(checkAuth());
+    dispatch(navBarLoadingOff());
+  }
+}
 // Authentication handler
 export const checkAuth = () => {
   return dispatch => {
-    dispatch(navBarLoadingOn());
     auth.onAuthStateChanged((user) => {
-      dispatch(navBarLoadingOff());
       if (user) {
         // User is signed in.
         console.log(user)
@@ -50,11 +58,21 @@ export const checkAuth = () => {
   }
 }
 
-export const signedIn = () => {
+const updateCurrentHackathon = (hackathon) => {
   return {
-    type: "SIGNED_IN"
+    type: "UPDATE_CURRENT_HACKATHON",
+    hackathon: hackathon
   }
 }
+
+export const getHackathon = () => {
+  return async(dispatch) => {
+    const hackathonId = await database.ref("currentHackathon").once("value");
+    const hackathon = await database.ref("hackathons").child(hackathonId.val()).once("value");
+    dispatch(updateCurrentHackathon(hackathon.val()))
+  }
+}
+
 
 // auth modal
 export const toggleAuthDialogOpen = () => {
@@ -86,6 +104,12 @@ export const signInError = (error) => {
   return {
     type: "SIGN_IN_ERROR",
     error: error
+  }
+}
+
+export const signedIn = () => {
+  return {
+    type: "SIGNED_IN"
   }
 }
 
@@ -208,29 +232,18 @@ export const getHackathons = () => {
   return async(dispatch) => {
     dispatch(navBarLoadingOn());
     // fetch in parallel
-    const results = await Promise.all([
+    const [current, hackathons, categories, prizes] = await Promise.all([
       database.ref("currentHackathon").once('value'),
       database.ref("hackathons").once('value'),
       database.ref("categories").once('value'),
       database.ref("prizes").once('value')
     ]);
-    // TODO test speed of parallel
-    // console.log(result)
-    // const currentHackathon = await database.ref("currentHackathon").once('value');
-    // console.log("1 fired")
-    // const hackathons = await database.ref("hackathons").once('value');
-    // console.log("2 fired")
-    // const categories = await database.ref("categories").once('value');
-    // console.log("3 fired")
-    // const prizes = await database.ref("prizes").once('value');
-    // console.log("4 fired")
-
     dispatch(
       addhackathons(
-        results[0].val(),
-        Object.values(results[1].val()),
-        Object.values(results[2].val()),
-        Object.values(results[3].val())
+        current.val(),
+        Object.values(hackathons.val() || {}),
+        Object.values(categories.val() || {}),
+        Object.values(prizes.val() || {})
       )
     );
     dispatch(navBarLoadingOff());

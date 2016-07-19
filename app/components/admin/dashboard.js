@@ -46,37 +46,26 @@ const iconButtonElement = (
   </IconButton>
 );
 
-const rightIconMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem onTouchTap={() => props.dispatch(deleteCategory())}>
-      Delete
-    </MenuItem>
-  </IconMenu>
-);
-
 export class Dashboard extends React.Component {
   componentDidMount() {
     this.props.dispatch(getHackathons())
   }
   render() {
-    console.log(this.props.state.admin)
     const dispatch = this.props.dispatch;
     const state = this.props.state.admin;
 
     const selectFields = state.hackathons.map((hackathon) => {
       return <MenuItem key={hackathon.id} value={hackathon.id} primaryText={"ID: "+hackathon.id} />
     });
-
     const selectedHackathon = state.hackathons.find((h) => h.id == state.selected);
 
-    let startDate, endDate, prizeFields;
+    let startDate, endDate, prizeFields, status;
     if(selectedHackathon) {
       startDate = new Date(selectedHackathon.startDate);
       endDate = new Date(selectedHackathon.endDate);
-
+      status = selectedHackathon.status;
       // get hackathon prize categories
       const categories = state.categories.filter((c) => c.hackId == selectedHackathon.id);
-
       prizeFields = categories.map((category) => {
         // get prizes in category
         const prizes = state.prizes.filter((prize) => prize.categoryId == category.id)
@@ -101,7 +90,6 @@ export class Dashboard extends React.Component {
           <span key={category.id}>
             <Row>
               <Column md={3} sm={6}>
-
                 <List>
                   <ListItem
                     rightIconButton={
@@ -158,6 +146,7 @@ export class Dashboard extends React.Component {
         <SelectField value={state.selected}>
           {selectFields}
         </SelectField>
+        <p>Status: {status}</p>
         <p>Dates displayed in local time.</p>
         <Row>
           <Column md={3} sm={6}>

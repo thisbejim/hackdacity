@@ -26,16 +26,16 @@ import { NavBar } from "./app/components/navbar/navbar";
 import { Rules } from "./app/components/rules/rules";
 import { Prizes } from "./app/components/prizes/prizes";
 import { Admin, Dashboard, Approve } from "./app/components/admin/admin";
-import { Submissions } from "./app/components/submissions/submissions";
+import { Home } from "./app/components/home/home";
 // grid
 import { Container } from './app/components/grid/grid';
 
 // actions
-import { checkAuth } from './app/actions/actions';
+import { startUp } from './app/actions/actions';
 
 class App extends React.Component {
   componentDidMount() {
-    this.props.dispatch(checkAuth());
+    this.props.dispatch(startUp());
   }
   render() {
     // clone state and dispatch to child component props
@@ -74,7 +74,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer}>
-        <IndexRoute component={Submissions} />
+        <IndexRoute component={Home} />
         <Route path="rules" component={Rules} />
         <Route path="prizes" component={Prizes} />
         <Route path="admin" component={Admin}>
