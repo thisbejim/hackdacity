@@ -22,35 +22,29 @@ const firebaseError = (error) => {
   }
 }
 
-// Navbar
-const navBarLoadingOn = () => {
-  return {
-    type: "NAVBAR_LOADING_ON"
-  }
-}
-
-const navBarLoadingOff = () => {
-  return {
-    type: "NAVBAR_LOADING_OFF"
-  }
-}
-
 // Start up
-
 export const startUp = () => {
   return async(dispatch) => {
+    var t0 = performance.now();
     dispatch(navBarLoadingOn());
-    dispatch(getHackathon())
-    dispatch(checkAuth());
+    await Promise.all([
+      dispatch(getHackathon()),
+      dispatch(checkAuth())
+    ]);
+    var t1 = performance.now();
+    console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
     dispatch(navBarLoadingOff());
   }
 }
+
 // Authentication handler
 export const checkAuth = () => {
   return dispatch => {
+    console.log("getting user")
     auth.onAuthStateChanged((user) => {
       if (user) {
         // User is signed in.
+        console.log("got user")
         console.log(user)
         dispatch(signedIn());
       }
@@ -67,12 +61,26 @@ const updateCurrentHackathon = (hackathon) => {
 
 export const getHackathon = () => {
   return async(dispatch) => {
+    console.log("getting hackathon")
     const hackathonId = await database.ref("currentHackathon").once("value");
     const hackathon = await database.ref("hackathons").child(hackathonId.val()).once("value");
+    console.log("got hackathon")
     dispatch(updateCurrentHackathon(hackathon.val()))
   }
 }
 
+// Navbar
+const navBarLoadingOn = () => {
+  return {
+    type: "NAVBAR_LOADING_ON"
+  }
+}
+
+const navBarLoadingOff = () => {
+  return {
+    type: "NAVBAR_LOADING_OFF"
+  }
+}
 
 // auth modal
 export const toggleAuthDialogOpen = () => {

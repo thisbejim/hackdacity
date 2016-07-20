@@ -1,11 +1,15 @@
 import React from 'react';
 
+// react-router
+import { browserHistory } from 'react-router';
+
 // material-ui
 import {
   AppBar, FlatButton, FontIcon,
   IconButton, IconMenu, MenuItem,
   LinearProgress, Snackbar
 } from 'material-ui';
+import SvgIcon from 'material-ui/SvgIcon';
 import { NavigationMoreVert } from 'material-ui/svg-icons';
 import { grey200 } from 'material-ui/styles/colors';
 
@@ -13,6 +17,8 @@ import { grey200 } from 'material-ui/styles/colors';
 import { RightNavLoggedIn } from "./rightNavLoggedIn";
 import { RightNavLoggedOut } from "./rightNavLoggedOut";
 import { AuthDialog } from "./authDialog";
+
+import Logo from './h-30.png';
 
 export const NavBar = (props) => {
     const dispatch = props.dispatch;
@@ -30,7 +36,7 @@ export const NavBar = (props) => {
     return (
       <span>
         <AppBar
-          iconElementLeft={<NavigationMoreVert />}
+          iconElementLeft={<img src={Logo} onClick={() => browserHistory.push('/') }/>}
           iconStyleLeft={style.leftIcon}
           iconElementRight={rightNav}
           iconStyleRight={style.rightIcon}

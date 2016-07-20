@@ -1,0 +1,42 @@
+{
+  "rules": {
+    "admins": {
+      ".read": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)",
+    },
+    "alumni": {
+      ".read": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)"
+    },
+    "applied": {
+      "$user_id": {
+        ".read": "root.child('admins').hasChild(auth.uid)",
+        ".write": "root.child('admins').hasChild(auth.uid) || $user_id === auth.uid",
+      }
+    },
+    "currentHackathon": {
+      ".read": "true",
+      ".write": "root.child('admins').hasChild(auth.uid)",
+    },
+    "hackathons": {
+      ".read": "true",
+      ".write": "root.child('admins').hasChild(auth.uid)",
+    },
+    "categories": {
+      ".read": "true",
+      ".write": "root.child('admins').hasChild(auth.uid)",
+    },
+    "prizes": {
+      ".read": "true",
+      ".write": "root.child('admins').hasChild(auth.uid)",
+    },
+    "slack": {
+      ".read": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)",
+    },
+    "submissions": {
+      ".read": "true",
+      ".write": "true",
+    }
+  }
+}

@@ -8,9 +8,7 @@ import { FlatButton, IconButton, IconMenu, MenuItem } from 'material-ui';
 import { NavigationMoreVert } from 'material-ui/svg-icons';
 
 // components
-import {
-  Row, Column
-} from '../grid/grid';
+import { Row, Column } from '../grid/grid';
 
 // actions
 import { signOut } from "../../actions/actions";
@@ -32,7 +30,6 @@ export const RightNavLoggedIn = (props) => {
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
           >
-            <MenuItem primaryText="Help" />
             <MenuItem primaryText="Sign out" onTouchTap={() => props.dispatch(signOut())}/>
           </IconMenu>
         </Column>
@@ -47,7 +44,9 @@ export const RightNavLoggedIn = (props) => {
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
           >
-            <MenuItem primaryText="Help" />
+            <MenuItem primaryText="Admin" onTouchTap={() => browserHistory.push('/admin/dashboard') } />
+            <MenuItem primaryText="Rules" onTouchTap={() => browserHistory.push('/rules') } />
+            <MenuItem primaryText="Prizes" onTouchTap={() => browserHistory.push('/prizes') } />
             <MenuItem primaryText="Sign out" onTouchTap={() => props.dispatch(signOut())}/>
           </IconMenu>
         </Column>
