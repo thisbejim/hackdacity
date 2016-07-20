@@ -4,7 +4,7 @@ import { dialogs } from './dialogs';
 import { admin } from './admin';
 import { navbar } from './navbar';
 import { submissions } from './submissions';
-import { home } from './home';
+import { hackathon } from './hackathon';
 
 export const reducer = combineReducers({
   user,
@@ -12,5 +12,5 @@ export const reducer = combineReducers({
   admin,
   navbar,
   submissions,
-  home
+  hackathon
 });

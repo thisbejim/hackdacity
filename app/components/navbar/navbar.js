@@ -17,8 +17,10 @@ import { grey200 } from 'material-ui/styles/colors';
 import { RightNavLoggedIn } from "./rightNavLoggedIn";
 import { RightNavLoggedOut } from "./rightNavLoggedOut";
 import { AuthDialog } from "./authDialog";
-
 import Logo from './h-30.png';
+
+// actions
+import { clearSnackBar } from "../../actions/actions";
 
 export const NavBar = (props) => {
     const dispatch = props.dispatch;
@@ -26,8 +28,8 @@ export const NavBar = (props) => {
     const navbar = props.state.navbar;
 
     const rightNav = user.signedIn
-      ? <RightNavLoggedIn dispatch={dispatch} />
-      : <RightNavLoggedOut dispatch={dispatch}/ >;
+      ? <RightNavLoggedIn dispatch={dispatch} state={user}/>
+      : <RightNavLoggedOut dispatch={dispatch} state={user}/>;
 
     const loader = navbar.loading
       ? <LinearProgress mode="indeterminate" style={style.progress}/>
@@ -46,9 +48,11 @@ export const NavBar = (props) => {
         {loader}
         <AuthDialog state={props.state} dispatch={dispatch} />
         <Snackbar
-          open={true}
-          message="Your account is awaiting verification"
+          bodyStyle={style.snackBar}
+          open={navbar.snackbar.open}
+          message={navbar.snackbar.message}
           autoHideDuration={4000}
+          onRequestClose={() => dispatch(clearSnackBar())}
         />
       </span>
     )
@@ -62,6 +66,9 @@ const style = {
     borderBottomWidth: 1,
     borderStyle: "solid",
     borderColor: "#dbe2e8"
+  },
+  snackBar: {
+    textAlign: "center"
   },
   progress: {
     borderRadius: 0,

@@ -13,7 +13,7 @@ module.exports = {
         loaders: [
             { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
             { test: /\.css$/, exclude: /node_modules/, loader: 'style!css-loader?modules&camelCase'},
-            { test: /\.png$/, exclude: /node_modules/, loader: 'url?limit=25000'}
+            { test: /\.(png|svg)$/, exclude: /node_modules/, loader: 'url?limit=25000'}
         ]
     }
 };

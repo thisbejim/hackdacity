@@ -14,11 +14,16 @@ import { Row, Column } from '../grid/grid';
 import { signOut } from "../../actions/actions";
 
 export const RightNavLoggedIn = (props) => {
+    let admin, adminMobile;
+    if(props.state.admin) {
+      admin = <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin/dashboard') }/>
+      adminMobile = <MenuItem primaryText="Admin" onTouchTap={() => browserHistory.push('/admin/dashboard') } />;
+    }
     return (
       <Row>
         {/* desktop/iPad */}
         <Column md={12} hiddenXs={true}>
-          <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin/dashboard') }/>
+          {admin}
           <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules') }/>
           <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes') }/>
           <IconMenu
@@ -44,7 +49,7 @@ export const RightNavLoggedIn = (props) => {
             targetOrigin={{horizontal: 'right', vertical: 'top'}}
             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
           >
-            <MenuItem primaryText="Admin" onTouchTap={() => browserHistory.push('/admin/dashboard') } />
+            {adminMobile}
             <MenuItem primaryText="Rules" onTouchTap={() => browserHistory.push('/rules') } />
             <MenuItem primaryText="Prizes" onTouchTap={() => browserHistory.push('/prizes') } />
             <MenuItem primaryText="Sign out" onTouchTap={() => props.dispatch(signOut())}/>

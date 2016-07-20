@@ -1,7 +1,7 @@
 {
   "rules": {
     "admins": {
-      ".read": "root.child('admins').hasChild(auth.uid)",
+      ".read": "auth != null",
       ".write": "root.child('admins').hasChild(auth.uid)",
     },
     "alumni": {

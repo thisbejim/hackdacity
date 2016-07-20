@@ -9,10 +9,10 @@ import { Row, Column } from '../grid/grid';
 
 export class Home extends React.Component {
     render() {
-      const state = this.props.state.home;
-      const startDate = state.hackathon.startDate;
-      const endDate = state.hackathon.endDate;
-
+      const state = this.props.state.hackathon;
+      const startDate = state.startDate;
+      const endDate = state.endDate;
+      console.log(this.props.state)
       if(startDate) {
         // check if the hackathon has started or ended
         const now = moment().valueOf();

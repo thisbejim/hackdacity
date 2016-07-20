@@ -25,14 +25,11 @@ const firebaseError = (error) => {
 // Start up
 export const startUp = () => {
   return async(dispatch) => {
-    var t0 = performance.now();
     dispatch(navBarLoadingOn());
     await Promise.all([
       dispatch(getHackathon()),
       dispatch(checkAuth())
     ]);
-    var t1 = performance.now();
-    console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
     dispatch(navBarLoadingOff());
   }
 }
@@ -40,17 +37,32 @@ export const startUp = () => {
 // Authentication handler
 export const checkAuth = () => {
   return dispatch => {
-    console.log("getting user")
     auth.onAuthStateChanged((user) => {
       if (user) {
-        // User is signed in.
-        console.log("got user")
         console.log(user)
-        dispatch(signedIn());
+        // User is signed in.
+        dispatch(signedIn(user.uid, user.displayName));
+        dispatch(openSnackBar("Signed In"))
+        dispatch(isAdmin(user.uid));
       }
     });
   }
 }
+
+const isAdmin = (uid) => {
+  return async(dispatch) => {
+    const admin = await database.ref("admins").child(uid).once("value");
+    dispatch(updateAdmin(admin.val()));
+  }
+}
+
+const updateAdmin = (isAdmin) => {
+  return {
+    type: "IS_ADMIN",
+    isAdmin: isAdmin
+  }
+}
+
 
 const updateCurrentHackathon = (hackathon) => {
   return {
@@ -61,10 +73,8 @@ const updateCurrentHackathon = (hackathon) => {
 
 export const getHackathon = () => {
   return async(dispatch) => {
-    console.log("getting hackathon")
     const hackathonId = await database.ref("currentHackathon").once("value");
     const hackathon = await database.ref("hackathons").child(hackathonId.val()).once("value");
-    console.log("got hackathon")
     dispatch(updateCurrentHackathon(hackathon.val()))
   }
 }
@@ -79,6 +89,19 @@ const navBarLoadingOn = () => {
 const navBarLoadingOff = () => {
   return {
     type: "NAVBAR_LOADING_OFF"
+  }
+}
+
+export const openSnackBar = (message) => {
+  return {
+    type: "OPEN_SNACK_BAR",
+    message: message
+  }
+}
+
+export const clearSnackBar = () => {
+  return {
+    type: "CLEAR_SNACK_BAR"
   }
 }
 
@@ -115,9 +138,11 @@ export const signInError = (error) => {
   }
 }
 
-export const signedIn = () => {
+export const signedIn = (uid, displayName) => {
   return {
-    type: "SIGNED_IN"
+    type: "SIGNED_IN",
+    uid: uid,
+    displayName: displayName
   }
 }
 
@@ -135,9 +160,7 @@ export const signIn = (email, password) => {
 }
 
 // sign up
-
 export const signUp = (name, email, password) => {
-  console.log("sign up called", name, email, password)
   return async(dispatch) => {
     try {
       dispatch(authDialogLoadingOn());
@@ -246,6 +269,7 @@ export const getHackathons = () => {
       database.ref("categories").once('value'),
       database.ref("prizes").once('value')
     ]);
+    // if val() is null pass empty obj to .values()
     dispatch(
       addhackathons(
         current.val(),
