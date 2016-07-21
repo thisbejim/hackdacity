@@ -53,7 +53,7 @@ export class Dashboard extends React.Component {
   render() {
     const dispatch = this.props.dispatch;
     const state = this.props.state.admin;
-
+    console.log(state.prizes, state.categories, state.hackathons)
     const selectFields = state.hackathons.map((hackathon) => {
       return <MenuItem key={hackathon.id} value={hackathon.id} primaryText={"ID: "+hackathon.id} />
     });
@@ -135,7 +135,7 @@ export class Dashboard extends React.Component {
       )
       : (
         <div>
-          <FlatButton label="Save" onTouchTap={() => dispatch(saveHackathon(state))}/>
+          <FlatButton label="Save" onTouchTap={() => dispatch(saveHackathon(state.prizes, state.categories, state.hackathons))}/>
           <FlatButton label="New Prize Category" onTouchTap={() => dispatch(addPrizeCategory(state.selected))}/>
         </div>
       );

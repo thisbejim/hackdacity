@@ -1,9 +1,9 @@
 [include]
-<PROJECT_ROOT>/index.js
+.*/index.js
 
 [ignore]
-<PROJECT_ROOT>/node_modules/fbjs/*
-<PROJECT_ROOT>/node_modules/react-tap-event-plugin/*
+.*/node_modules/fbjs/*
+.*/node_modules/react-tap-event-plugin/*
 
 [libs]
 ./interfaces/global.js

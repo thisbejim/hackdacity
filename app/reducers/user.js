@@ -14,7 +14,7 @@ export const user = (state=initialState, action) => {
         displayName: action.displayName
       })
     case "SIGNED_OUT":
-      return Object.assign({}, state, {signedIn: false})
+      return Object.assign({}, state, initialState)
     case "IS_ADMIN":
       return Object.assign({}, state, {admin: action.isAdmin})
     default:

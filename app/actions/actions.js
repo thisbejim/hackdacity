@@ -1,7 +1,15 @@
+// @flow
+
 // fetch
 import 'whatwg-fetch';
 // react-router
 import { browserHistory } from 'react-router'
+// types
+import {
+  Action, Hackathon, Hackathons,
+  Prizes, Categories, Applicants,
+  ThunkAction
+} from "./types";
 
 // Firebase
 const config = {
@@ -15,16 +23,19 @@ firebase.initializeApp(config);
 const auth = firebase.auth();
 const database = firebase.database();
 
-const firebaseError = (error) => {
+const firebaseError = (error: {code: string, message: string}): string => {
   switch(error.code) {
     case "auth/user-not-found":
       return "You did not enter a valid Hackdacity account."
+    default:
+      return "Unknown error occurred."
   }
 }
 
 // Start up
-export const startUp = () => {
-  return async(dispatch) => {
+export const startUp = (): ThunkAction => {
+  return async(dispatch): Promise<void> => {
+    console.log(dispatch)
     dispatch(navBarLoadingOn());
     await Promise.all([
       dispatch(getHackathon()),
@@ -35,11 +46,10 @@ export const startUp = () => {
 }
 
 // Authentication handler
-export const checkAuth = () => {
-  return dispatch => {
+export const checkAuth = (): ThunkAction => {
+  return (dispatch): void => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log(user)
         // User is signed in.
         dispatch(signedIn(user.uid, user.displayName));
         dispatch(openSnackBar("Signed In"))
@@ -49,30 +59,30 @@ export const checkAuth = () => {
   }
 }
 
-const isAdmin = (uid) => {
-  return async(dispatch) => {
+
+const isAdmin = (uid: string): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     const admin = await database.ref("admins").child(uid).once("value");
     dispatch(updateAdmin(admin.val()));
   }
 }
 
-const updateAdmin = (isAdmin) => {
+const updateAdmin = (isAdmin: boolean): Action => {
   return {
     type: "IS_ADMIN",
     isAdmin: isAdmin
   }
 }
 
-
-const updateCurrentHackathon = (hackathon) => {
+const updateCurrentHackathon = (hackathon: Hackathon): Action => {
   return {
     type: "UPDATE_CURRENT_HACKATHON",
     hackathon: hackathon
   }
 }
 
-export const getHackathon = () => {
-  return async(dispatch) => {
+export const getHackathon = (): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     const hackathonId = await database.ref("currentHackathon").once("value");
     const hackathon = await database.ref("hackathons").child(hackathonId.val()).once("value");
     dispatch(updateCurrentHackathon(hackathon.val()))
@@ -80,65 +90,65 @@ export const getHackathon = () => {
 }
 
 // Navbar
-const navBarLoadingOn = () => {
+const navBarLoadingOn = (): Action => {
   return {
     type: "NAVBAR_LOADING_ON"
   }
 }
 
-const navBarLoadingOff = () => {
+const navBarLoadingOff = (): Action => {
   return {
     type: "NAVBAR_LOADING_OFF"
   }
 }
 
-export const openSnackBar = (message) => {
+export const openSnackBar = (message: string): Action => {
   return {
     type: "OPEN_SNACK_BAR",
     message: message
   }
 }
 
-export const clearSnackBar = () => {
+export const clearSnackBar = (): Action => {
   return {
     type: "CLEAR_SNACK_BAR"
   }
 }
 
 // auth modal
-export const toggleAuthDialogOpen = () => {
+export const toggleAuthDialogOpen = (): Action => {
   return {
     type: "TOGGLE_AUTH_DIALOG_OPEN"
   }
 }
 
-const authDialogLoadingOn = () => {
+const authDialogLoadingOn = (): Action => {
   return {
     type: "AUTH_MODAL_LOADING_ON"
   }
 }
 
-const authDialogLoadingOff = () => {
+const authDialogLoadingOff = (): Action => {
   return {
     type: "AUTH_MODAL_LOADING_OFF"
   }
 }
 
 // Sign in
-export const toggleAuthPage = () => {
+export const toggleAuthPage = (): Action => {
   return {
     type: "TOGGLE_AUTH_PAGE"
   }
 }
 
-export const signInError = (error) => {
+export const signInError = (error: string): Action => {
   return {
     type: "SIGN_IN_ERROR",
     error: error
   }
 }
 
-export const signedIn = (uid, displayName) => {
+export const signedIn = (uid: string, displayName: string): Action => {
   return {
     type: "SIGNED_IN",
     uid: uid,
@@ -146,9 +156,8 @@ export const signedIn = (uid, displayName) => {
   }
 }
 
-export const signIn = (email, password) => {
-  console.log("sign in called", email, password)
-  return async(dispatch) => {
+export const signIn = (email: string, password: string): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     try {
       dispatch(authDialogLoadingOn());
       await auth.signInWithEmailAndPassword(email, password);
@@ -160,8 +169,8 @@ export const signIn = (email, password) => {
 }
 
 // sign up
-export const signUp = (name, email, password) => {
-  return async(dispatch) => {
+export const signUp = (name: string, email: string, password: string): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     try {
       dispatch(authDialogLoadingOn());
       const user = await auth.createUserWithEmailAndPassword(email, password);
@@ -183,14 +192,14 @@ export const signUp = (name, email, password) => {
 
 
 // Sign out
-const signedOut = () => {
+const signedOut = (): Action => {
   return {
     type: "SIGNED_OUT"
   }
 }
 
-export const signOut = () => {
-  return async(dispatch) => {
+export const signOut = (): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     try {
       await auth.signOut();
       dispatch(signedOut());
@@ -204,14 +213,14 @@ export const signOut = () => {
 // Admin
 
 // approve
-export const invalidApplicant = (user_id) => {
-  return async(dispatch) => {
+export const invalidApplicant = (user_id: string): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     await database.ref("applied").child(user_id).remove();
   }
 }
 
-export const validApplicant = (user_id, email, token) => {
-  return async(dispatch) => {
+export const validApplicant = (user_id: string, email: string, token: string): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     try {
       await Promise.all([
         database.ref("alumni").child(user_id).set(true),
@@ -224,15 +233,15 @@ export const validApplicant = (user_id, email, token) => {
   }
 }
 
-const addApplicants = (applicants) => {
+const addApplicants = (applicants: Applicants): Action => {
   return {
     type: "ADD_APPLICANTS",
     applicants: applicants
   }
 }
 
-export const getApplicants = () => {
-  return dispatch => {
+export const getApplicants = (): ThunkAction => {
+  return (dispatch): void => {
     dispatch(navBarLoadingOn());
     database.ref("applied").orderByChild("date").on('value', (snapshot) => {
       const applicants = Object.values(snapshot.val());
@@ -242,14 +251,14 @@ export const getApplicants = () => {
   }
 }
 
-export const detachApplicantListener = () => {
-  return dispatch => {
+export const detachApplicantListener = (): ThunkAction => {
+  return (dispatch): void => {
     database.ref("applied").off('value');
   }
 }
 
 // Dashboard
-const addhackathons = (currentHackathon, hackathons, categories, prizes) => {
+const addhackathons = (currentHackathon: string, hackathons: Hackathons, categories: Categories, prizes: Prizes): Action => {
   return {
     type: "ADD_HACKATHONS",
     currentHackathon: currentHackathon,
@@ -259,8 +268,12 @@ const addhackathons = (currentHackathon, hackathons, categories, prizes) => {
   }
 }
 
-export const getHackathons = () => {
-  return async(dispatch) => {
+/**
+ * Convert prizes, prize categories, and hackathons to arrays for easy
+ * manipulation in the reducer.
+ */
+export const getHackathons = (): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     dispatch(navBarLoadingOn());
     // fetch in parallel
     const [current, hackathons, categories, prizes] = await Promise.all([
@@ -269,7 +282,7 @@ export const getHackathons = () => {
       database.ref("categories").once('value'),
       database.ref("prizes").once('value')
     ]);
-    // if val() is null pass empty obj to .values()
+    // If val() is null pass empty obj to .values()
     dispatch(
       addhackathons(
         current.val(),
@@ -282,20 +295,20 @@ export const getHackathons = () => {
   }
 }
 
-export const toggleEditHackathon = () => {
+export const toggleEditHackathon = (): Action => {
   return {
     type: "TOGGLE_EDIT_HACKATHON"
   }
 }
 
-export const deletePrize = (id) => {
+export const deletePrize = (id: string): Action => {
   return {
     type: "DELETE_PRIZE",
     id: id
   }
 }
 
-export const addPrize = (categoryId) => {
+export const addPrize = (categoryId: string): Action => {
   return {
     type: "ADD_PRIZE",
     categoryId: categoryId,
@@ -303,7 +316,7 @@ export const addPrize = (categoryId) => {
   }
 }
 
-export const updatePrize = (id, text) => {
+export const updatePrize = (id: string, text: string): Action => {
   return {
     type: "UPDATE_PRIZE",
     id: id,
@@ -311,7 +324,7 @@ export const updatePrize = (id, text) => {
   }
 }
 
-export const updateCategory = (id, name) => {
+export const updateCategory = (id: string, name: string): Action => {
   return {
     type: "UPDATE_CATEGORY",
     id: id,
@@ -319,7 +332,7 @@ export const updateCategory = (id, name) => {
   }
 }
 
-export const addPrizeCategory = (hackId) => {
+export const addPrizeCategory = (hackId: string): Action => {
   return {
     type: "ADD_PRIZE_CATEGORY",
     hackId: hackId,
@@ -327,14 +340,14 @@ export const addPrizeCategory = (hackId) => {
   }
 }
 
-export const deleteCategory = (categoryId) => {
+export const deleteCategory = (categoryId: string): Action => {
   return {
     type: "DELETE_CATEGORY",
     categoryId: categoryId
   }
 }
 
-export const updateDate = (id, date, dateType) => {
+export const updateDate = (id: string, date: Date, dateType: string): Action => {
   return {
     type: "UPDATE_DATE",
     id: id,
@@ -342,22 +355,27 @@ export const updateDate = (id, date, dateType) => {
     dateType: dateType
   }
 }
-export const saveHackathon = (state) => {
-  return async(dispatch) => {
+
+/**
+ * Reduce prizes, prize categories, and hackathons to objects
+ * to save back into Firebase.
+ */
+export const saveHackathon = (p: Prizes, c: Categories, h: Hackathons): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     // prizes
-    const prizes = state.prizes.reduce((previous, current) => {
+    const prizes = p.reduce((previous, current) => {
       previous[current.id] = current
       return previous
     }, {});
 
     // prize categories
-    const categories = state.categories.reduce((previous, current) => {
+    const categories = c.reduce((previous, current) => {
       previous[current.id] = current
       return previous
     }, {});
 
     // prize hackathons
-    const hackathons = state.hackathons.reduce((previous, current) => {
+    const hackathons = h.reduce((previous, current) => {
       previous[current.id] = current
       return previous
     }, {});
@@ -373,7 +391,7 @@ export const saveHackathon = (state) => {
 }
 
 // Slack
-const addUserToSlack = async(email, token) => {
+const addUserToSlack = async(email: string, token: string): Promise<void> => {
   const formData = new FormData();
   formData.append('email', email);
   formData.append('token', token);
@@ -383,15 +401,15 @@ const addUserToSlack = async(email, token) => {
   });
 }
 
-const updateSlackCredentials = (token) => {
+const updateSlackCredentials = (token: string): Action => {
   return {
     type: "UPDATE_SLACK_CREDENTIALS",
     token: token
   }
 }
 
-export const getSlackCredentials = () => {
-  return async(dispatch) => {
+export const getSlackCredentials = (): ThunkAction => {
+  return async(dispatch): Promise<void> => {
     const slack = await database.ref("slack").once('value');
     dispatch(updateSlackCredentials(slack.val().token));
   }
@@ -399,7 +417,7 @@ export const getSlackCredentials = () => {
 
 
 // submissions
-export const changeTab = (tab) => {
+export const changeTab = (tab: string): Action => {
   return {
     type: "CHANGE_TAB",
     tab: tab
