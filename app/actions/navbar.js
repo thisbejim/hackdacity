@@ -1,35 +1,27 @@
 // @flow
 
 // types
-import { Action } from "./types";
+import { Action } from './types';
 
 // Navbar
-const navBarLoadingOn = (): Action => {
-  return {
-    type: "NAVBAR_LOADING_ON"
-  }
-}
+const navBarLoadingOn = (): Action => ({
+  type: 'NAVBAR_LOADING_ON',
+});
 
-const navBarLoadingOff = (): Action => {
-  return {
-    type: "NAVBAR_LOADING_OFF"
-  }
-}
+const navBarLoadingOff = (): Action => ({
+  type: 'NAVBAR_LOADING_OFF',
+});
 
-const openSnackBar = (message: string): Action => {
-  return {
-    type: "OPEN_SNACK_BAR",
-    message: message
-  }
-}
+const openSnackBar = (message: string): Action => ({
+  type: 'OPEN_SNACK_BAR',
+  message,
+});
 
-const clearSnackBar = (): Action => {
-  return {
-    type: "CLEAR_SNACK_BAR"
-  }
-}
+const clearSnackBar = (): Action => ({
+  type: 'CLEAR_SNACK_BAR',
+});
 
 module.exports = {
   navBarLoadingOn, navBarLoadingOff, openSnackBar,
-  clearSnackBar
+  clearSnackBar,
 };

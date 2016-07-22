@@ -1,3 +1,6 @@
+// fetch
+import 'whatwg-fetch';
+
 // react
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -5,11 +8,11 @@ import ReactDOM from 'react-dom';
 // redux
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
-import { reducer } from "./app/reducers/reducer.js";
+import { reducer } from './app/reducers/reducer.js';
 import thunk from 'redux-thunk';
 
 // react-router
-import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 // material ui
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -17,14 +20,14 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 // css
-import "./app/css/style.css";
+import './app/css/style.css';
 
 // components
-import { NavBar } from "./app/components/navbar/navbar";
-import { Rules } from "./app/components/rules/rules";
-import { Prizes } from "./app/components/prizes/prizes";
-import { Admin, Dashboard, Approve } from "./app/components/admin/admin";
-import { Home } from "./app/components/home/home";
+import { NavBar } from './app/components/navbar/navbar';
+import { Rules } from './app/components/rules/rules';
+import { Prizes } from './app/components/prizes/prizes';
+import { Admin, Dashboard, Approve } from './app/components/admin/admin';
+import { Home } from './app/components/home/home';
 // grid
 import { Container } from './app/components/grid/grid';
 
@@ -38,8 +41,13 @@ class App extends React.Component {
   render() {
     // clone state and dispatch to child component props
     let elements;
-    if(this.props.children) {
-      elements = React.cloneElement(this.props.children, { state: this.props.state, dispatch: this.props.dispatch })
+    if (this.props.children) {
+      elements = React.cloneElement(this.props.children,
+        {
+          state: this.props.state,
+          dispatch: this.props.dispatch
+        }
+      );
     }
     return (
       <MuiThemeProvider>
@@ -50,18 +58,16 @@ class App extends React.Component {
           </Container>
         </span>
       </MuiThemeProvider>
-    )
+    );
   }
-};
+}
 
 // create store
-const store = createStore(reducer, applyMiddleware(thunk))
+const store = createStore(reducer, applyMiddleware(thunk));
 
-const mapStateToProps = (state) => {
-  return {
-    state: state
-  }
-};
+const mapStateToProps = (state) => ({
+  state,
+});
 
 // connect to store
 const AppContainer = connect(
@@ -76,8 +82,8 @@ ReactDOM.render(
         <Route path="rules" component={Rules} />
         <Route path="prizes" component={Prizes} />
         <Route path="admin" component={Admin}>
-          <Route path="dashboard" component={Dashboard}/>
-          <Route path="approve" component={Approve}/>
+          <Route path="dashboard" component={Dashboard} />
+          <Route path="approve" component={Approve} />
         </Route>
       </Route>
     </Router>

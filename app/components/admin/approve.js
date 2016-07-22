@@ -16,7 +16,6 @@ import {
 
 export class Approve extends React.Component {
   componentDidMount() {
-    console.log("approve", this.props)
     const dispatch = this.props.dispatch;
     dispatch(getSlackCredentials());
     dispatch(getApplicants());
