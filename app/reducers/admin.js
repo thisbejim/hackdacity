@@ -68,7 +68,7 @@ export const admin = (state=initialState, action) => {
       var categories = [
         ...state.categories,
         {
-          hackId: action.hackId,
+          hackathonId: action.hackathonId,
           id: action.id,
           name: ""
         }

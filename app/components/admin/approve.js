@@ -36,7 +36,7 @@ export class Approve extends React.Component {
             secondaryText={applicant.name}
             leftCheckbox={
               <Checkbox
-                onCheck={() => dispatch(validApplicant(applicant.id, applicant.email, admin.slack.token))}
+                onCheck={() => dispatch(validApplicant(applicant.id, applicant.name, applicant.email, admin.slack.token))}
               />
             }
             rightIcon={

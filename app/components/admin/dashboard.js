@@ -53,7 +53,6 @@ export class Dashboard extends React.Component {
   render() {
     const dispatch = this.props.dispatch;
     const state = this.props.state.admin;
-    console.log(state.prizes, state.categories, state.hackathons)
     const selectFields = state.hackathons.map((hackathon) => {
       return <MenuItem key={hackathon.id} value={hackathon.id} primaryText={"ID: "+hackathon.id} />
     });
@@ -65,7 +64,7 @@ export class Dashboard extends React.Component {
       endDate = new Date(selectedHackathon.endDate);
       status = selectedHackathon.status;
       // get hackathon prize categories
-      const categories = state.categories.filter((c) => c.hackId == selectedHackathon.id);
+      const categories = state.categories.filter((c) => c.hackathonId == selectedHackathon.id);
       prizeFields = categories.map((category) => {
         // get prizes in category
         const prizes = state.prizes.filter((prize) => prize.categoryId == category.id)

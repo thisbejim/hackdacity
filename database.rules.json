@@ -9,8 +9,14 @@
       ".write": "root.child('admins').hasChild(auth.uid)"
     },
     "applied": {
-      "$user_id": {
+      "$application_id": {
         ".read": "root.child('admins').hasChild(auth.uid)",
+        ".write": "root.child('admins').hasChild(auth.uid) || $application_id === auth.uid",
+      }
+    },
+    "users": {
+      "$user_id": {
+        ".read": "true",
         ".write": "root.child('admins').hasChild(auth.uid) || $user_id === auth.uid",
       }
     },
@@ -23,6 +29,7 @@
       ".write": "root.child('admins').hasChild(auth.uid)",
     },
     "categories": {
+      ".indexOn": ["hackathonId"],
       ".read": "true",
       ".write": "root.child('admins').hasChild(auth.uid)",
     },
@@ -36,7 +43,15 @@
     },
     "submissions": {
       ".read": "true",
-      ".write": "true",
+      ".indexOn": ["hackathonId"],
+      "$submission" : {
+        "votes": {
+          "$user_id": {
+            ".write": "$user_id === auth.uid",
+            ".validate": "newData.val() == true || newData.val() == null"
+          }
+        },
+      }
     }
   }
 }
