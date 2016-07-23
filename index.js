@@ -34,7 +34,14 @@ import { Container } from './app/components/grid/grid';
 // actions
 import { startUp } from './app/actions/actions';
 
+type Props = {
+  state: any,
+  dispatch: () => void,
+  children?: any
+}
+
 class App extends React.Component {
+  props: Props;
   componentDidMount() {
     this.props.dispatch(startUp());
   }
@@ -45,7 +52,7 @@ class App extends React.Component {
       elements = React.cloneElement(this.props.children,
         {
           state: this.props.state,
-          dispatch: this.props.dispatch
+          dispatch: this.props.dispatch,
         }
       );
     }

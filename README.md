@@ -1,4 +1,9 @@
-
+## Contributing
+Prerequisites:
+[Getting started with Redux](https://egghead.io/courses/getting-started-with-redux)
+[Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)
+[Using Redux with Flow](http://frantic.im/using-redux-with-flow)
+[React with Flow](https://flowtype.org/docs/react.html)
 ## How Hackdacity Works
 
 ### Voting

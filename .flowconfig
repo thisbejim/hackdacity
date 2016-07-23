@@ -10,6 +10,7 @@
 
 [options]
 module.name_mapper='.*\(.css\)' -> 'CSSModule'
+module.name_mapper='.*\.\(svg\|png\|jpg\|gif\)$' -> 'Images'
 module.system=haste
 strip_root=true
 esproposal.class_static_fields=enable

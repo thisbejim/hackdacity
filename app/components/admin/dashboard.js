@@ -1,14 +1,12 @@
+// @flow
 import React from 'react';
-
-// react-router
-import { browserHistory } from 'react-router';
 
 // material-ui
 import {
   FlatButton, TextField, SelectField,
   MenuItem, DatePicker, TimePicker,
   IconButton, Divider, List,
-  ListItem, Subheader, IconMenu
+  ListItem, IconMenu,
 } from 'material-ui';
 
 // icons
@@ -27,64 +25,81 @@ import {
   saveHackathon,
   updatePrize,
   updateCategory,
-  updateDate
-} from "../../actions/actions";
+  updateDate,
+} from '../../actions/actions';
 
 // components
 import {
-  Row, Column
+  Row, Column,
 } from '../grid/grid';
+
+// types
+import type { Admin } from '../../reducers/types';
 
 const iconButtonElement = (
   <IconButton
-    touch={true}
+    touch
     tooltip="more"
     tooltipPosition="bottom-left"
-    style={{top: 13}}
+    style={{ top: 13 }}
   >
     <MoreVertIcon />
   </IconButton>
 );
 
+type Props = {
+  dispatch: () => void,
+  state: Admin
+};
+
 export class Dashboard extends React.Component {
+  props: Props;
   componentDidMount() {
-    this.props.dispatch(getHackathons())
+    this.props.dispatch(getHackathons());
   }
   render() {
     const dispatch = this.props.dispatch;
-    const state = this.props.state.admin;
-    const selectFields = state.hackathons.map((hackathon) => {
-      return <MenuItem key={hackathon.id} value={hackathon.id} primaryText={"ID: "+hackathon.id} />
-    });
-    const selectedHackathon = state.hackathons.find((h) => h.id == state.selected);
+    const state = this.props.state;
+    const selectFields = state.hackathons.map((hackathon) =>
+      <MenuItem key={hackathon.id} value={hackathon.id} primaryText={`ID: ${hackathon.id}`} />
+    );
+    const selectedHackathon = state.hackathons.find((h) => h.id === state.selected);
 
-    let startDate, endDate, prizeFields, status;
-    if(selectedHackathon) {
+    let startDate;
+    let endDate;
+    let prizeFields;
+    let status;
+    if (selectedHackathon) {
       startDate = new Date(selectedHackathon.startDate);
       endDate = new Date(selectedHackathon.endDate);
       status = selectedHackathon.status;
       // get hackathon prize categories
-      const categories = state.categories.filter((c) => c.hackathonId == selectedHackathon.id);
+      const categories = state.categories.filter((c) => c.hackathonId === selectedHackathon.id);
       prizeFields = categories.map((category) => {
         // get prizes in category
-        const prizes = state.prizes.filter((prize) => prize.categoryId == category.id)
-        .map((prize) => {
-          return (
-            <ListItem
-              key={prize.id}
-              primaryText={<TextField
+        const prizes = state.prizes.filter((prize) => prize.categoryId === category.id)
+        .map((prize) =>
+          <ListItem
+            key={prize.id}
+            primaryText={
+              <TextField
                 id={prize.id}
-                fullWidth={true}
+                fullWidth
                 disabled={state.editDisabled}
                 defaultValue={prize.text}
                 onChange={(event, value) => dispatch(updatePrize(prize.id, value))}
-              />}
-              rightIcon={<IconButton disabled={state.editDisabled} onTouchTap={() => dispatch(deletePrize(prize.id))}>
+              />
+            }
+            rightIcon={
+              <IconButton
+                disabled={state.editDisabled}
+                onTouchTap={() => dispatch(deletePrize(prize.id))}
+              >
                 <ContentClear />
-              </IconButton>}
-            />
-          )
-        });
+              </IconButton>
+            }
+          />
+        );
         return (
           <span key={category.id}>
             <Row>
@@ -101,7 +116,7 @@ export class Dashboard extends React.Component {
                     primaryText={
                       <TextField
                         id={category.id}
-                        fullWidth={true}
+                        fullWidth
                         disabled={state.editDisabled}
                         defaultValue={category.name}
                         onChange={(event, value) => dispatch(updateCategory(category.id, value))}
@@ -110,7 +125,10 @@ export class Dashboard extends React.Component {
                   />
                   {prizes}
                 </List>
-                <IconButton disabled={state.editDisabled} onTouchTap={() => dispatch(addPrize(category.id))}>
+                <IconButton
+                  disabled={state.editDisabled}
+                  onTouchTap={() => dispatch(addPrize(category.id))}
+                >
                   <ContentAdd />
                 </IconButton>
               </Column>
@@ -121,23 +139,29 @@ export class Dashboard extends React.Component {
               </Column>
             </Row>
           </span>
-        )
+        );
       });
     }
 
     const adminButtons = state.editDisabled
-      ? (
-        <div>
-          <FlatButton label="Edit Hackathon" onTouchTap={() => dispatch(toggleEditHackathon())}/>
-          <FlatButton disabled={true} label="Create New Hackathon"/>
-        </div>
-      )
-      : (
-        <div>
-          <FlatButton label="Save" onTouchTap={() => dispatch(saveHackathon(state.prizes, state.categories, state.hackathons))}/>
-          <FlatButton label="New Prize Category" onTouchTap={() => dispatch(addPrizeCategory(state.selected))}/>
-        </div>
-      );
+      ?
+      <div>
+        <FlatButton label="Edit Hackathon" onTouchTap={() => dispatch(toggleEditHackathon())} />
+        <FlatButton disabled label="Create New Hackathon" />
+      </div>
+      :
+      <div>
+        <FlatButton
+          label="Save"
+          onTouchTap={
+            () => dispatch(saveHackathon(state.prizes, state.categories, state.hackathons))
+          }
+        />
+        <FlatButton
+          label="New Prize Category"
+          onTouchTap={() => dispatch(addPrizeCategory(state.selected))}
+        />
+      </div>;
     return (
       <span>
         <h1>Dashboard</h1>
@@ -153,13 +177,13 @@ export class Dashboard extends React.Component {
               disabled={state.editDisabled}
               value={startDate}
               floatingLabelText="Start Date"
-              onChange={(event, date) => dispatch(updateDate(state.selected, date, "startDate"))}
+              onChange={(event, date) => dispatch(updateDate(state.selected, date, 'startDate'))}
             />
             <DatePicker
               disabled={state.editDisabled}
               value={endDate}
               floatingLabelText="End Date"
-              onChange={(event, date) => dispatch(updateDate(state.selected, date, "endDate"))}
+              onChange={(event, date) => dispatch(updateDate(state.selected, date, 'endDate'))}
             />
           </Column>
           <Column md={3} sm={6}>
@@ -167,13 +191,13 @@ export class Dashboard extends React.Component {
               disabled={state.editDisabled}
               value={startDate}
               floatingLabelText="Start Time"
-              onChange={(event, date) => dispatch(updateDate(state.selected, date, "startDate"))}
+              onChange={(event, date) => dispatch(updateDate(state.selected, date, 'startDate'))}
             />
             <TimePicker
               disabled={state.editDisabled}
               value={endDate}
               floatingLabelText="End Time"
-              onChange={(event, date) => dispatch(updateDate(state.selected, date, "endDate"))}
+              onChange={(event, date) => dispatch(updateDate(state.selected, date, 'endDate'))}
             />
           </Column>
         </Row>
@@ -181,6 +205,6 @@ export class Dashboard extends React.Component {
         {prizeFields}
         {adminButtons}
       </span>
-    )
+    );
   }
 }

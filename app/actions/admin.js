@@ -13,7 +13,7 @@ import {
 // types
 import {
   Action, Prizes, Categories,
-  Applicants, ThunkAction,
+  Applicants, ThunkAction, Hackathons,
 } from './types';
 
 const updateAdmin = (isAdmin: boolean): Action => ({
@@ -43,7 +43,7 @@ const getSlackCredentials = (): ThunkAction => async(dispatch): Promise<void> =>
 };
 
 // Admin permission checks
-const isAdmin = (uid: string) => async(dispatch): Promise<void> => {
+const isAdmin = (uid: string): ThunkAction => async(dispatch): Promise<void> => {
   const admin = await database.ref('admins').child(uid).once('value');
   dispatch(updateAdmin(admin.val()));
 };
