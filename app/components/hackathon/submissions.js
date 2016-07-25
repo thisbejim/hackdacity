@@ -33,26 +33,18 @@ export const Submissions = (props: Props) => {
   const tab = props.state.hackathon.tab;
 
   const categories = props.state.hackathon.categories.map((category) => {
+    // filter submissions by category id
     const submissions = props.state.hackathon.submissions.filter(
       (s) => s.categories.hasOwnProperty(category.id)
-    ).map((submission, index) => {
-      const voteButton = submission.votes.hasOwnProperty(uid)
-        ? <CancelVote dispatch={props.dispatch} submission={submission} uid={uid} />
-        : <UpVote dispatch={props.dispatch} submission={submission} uid={uid} />;
-      return (
-        <Column key={index} md={4} sm={6}>
-          <Card style={style.card}>
-            <CardHeader title={"test"} />
-            <CardMedia mediaStyle={style.cardMedia} >
-              <img src={'http://placehold.it/350x350'} alt={"test"} />
-            </CardMedia>
-            <CardActions>
-              {voteButton}
-            </CardActions>
-          </Card>
-        </Column>
-      );
-    });
+      // map each submission to component
+      ).map((submission, index) =>
+        <SubmissionCard
+          uid={uid}
+          index={index}
+          submission={submission}
+          dispatch={props.dispatch}
+        />
+    );
     return (
       <Tab key={category.id} label={category.name} value={category.id}>
         <Row>
@@ -75,35 +67,54 @@ export const Submissions = (props: Props) => {
   );
 };
 
+type CardProps = {
+  index: number,
+  uid: ?string,
+  submission: Submission,
+  dispatch: () => void
+}
+
+const SubmissionCard = (props: CardProps) => {
+  // determine if current user has voted for this submission or not
+  const voteButton = props.submission.votes.hasOwnProperty(props.uid)
+    ? <CancelVote dispatch={props.dispatch} submission={props.submission} uid={props.uid} />
+    : <UpVote dispatch={props.dispatch} submission={props.submission} uid={props.uid} />;
+  return (
+    <Column key={props.index} md={4} sm={6}>
+      <Card style={style.card}>
+        <CardHeader title={"test"} />
+        <CardMedia mediaStyle={style.cardMedia} >
+          <img src={'http://placehold.it/350x350'} alt={"test"} />
+        </CardMedia>
+        <CardActions>
+          {voteButton}
+        </CardActions>
+      </Card>
+    </Column>
+  );
+};
+
 type ButtonProps = {
   uid: ?string,
   submission: Submission,
   dispatch: () => void
 };
 
-const CancelVote = (props: ButtonProps) => {
-  const s = props.submission;
-  return (
-    <FlatButton
-      onTouchTap={() => props.dispatch(cancelVote(s.id, props.uid))}
-      label={s.points}
-      labelStyle={style.cancel}
-      backgroundColor="green"
-    />
-  );
-};
+const CancelVote = (props: ButtonProps) =>
+  <FlatButton
+    onTouchTap={() => props.dispatch(cancelVote(props.submission.id, props.uid))}
+    label={props.submission.points}
+    labelStyle={style.cancel}
+    backgroundColor="green"
+  />;
 
-const UpVote = (props: ButtonProps) => {
-  const s = props.submission;
-  return (
-    <FlatButton
-      onTouchTap={() => props.dispatch(upvote(s.id, props.uid))}
-      label={s.points}
-      labelStyle={style.upvote}
-      backgroundColor="red"
-    />
-  );
-};
+const UpVote = (props: ButtonProps) =>
+  <FlatButton
+    onTouchTap={() => props.dispatch(upvote(props.submission.id, props.uid))}
+    label={props.submission.points}
+    labelStyle={style.upvote}
+    backgroundColor="red"
+  />;
 
 
 const style = {

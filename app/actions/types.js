@@ -1,3 +1,4 @@
+// @flow
 // All action types
 export type Action =
     // navbar
@@ -44,7 +45,7 @@ export type Hackathons = Array<Hackathon>;
 export type Hackathon = {
   startDate: string,
   id: string,
-  startDate: string,
+  endDate: string,
   status: string
 };
 
@@ -57,7 +58,7 @@ export type Submission = {
   points: number
 };
 
-export type Applicants = Array<Applicant>;
+export type Applicants = Array<?Applicant>;
 
 type Applicant = {
   email: string,

@@ -20,6 +20,7 @@ type Props = {
 
 export const Prizes = (props: Props) => {
   const hackathon = props.state.hackathon;
+  // filter prizes by category id and display
   const categories = hackathon.categories.map((category) => {
     const prizes = hackathon.prizes.filter((prize) => prize.categoryId === category.id)
     .map((prize) => <ListItem key={prize.id} primaryText={prize.text} />);

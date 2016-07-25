@@ -19,8 +19,8 @@ export type Navbar = {
 }
 
 export type Hackathon = {
-  startDate: ?number,
-  endDate: ?number,
+  startDate: ?string,
+  endDate: ?string,
   id: ?string,
   submissions: Submissions,
   categories: Categories,

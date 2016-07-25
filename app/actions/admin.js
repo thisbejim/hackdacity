@@ -11,7 +11,7 @@ import {
 } from './navbar';
 
 // types
-import {
+import type {
   Action, Prizes, Categories,
   Applicants, ThunkAction, Hackathons,
 } from './types';
