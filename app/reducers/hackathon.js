@@ -8,6 +8,7 @@ const initialState = {
   id: null,
   submissions: [],
   categories: [],
+  prizes: [],
   tab: null,
 };
 
@@ -20,6 +21,7 @@ export const hackathon = (state : Hackathon = initialState, action: Action): Hac
         endDate: hack.endDate,
         id: hack.id,
         categories: action.categories,
+        prizes: action.prizes,
         tab: action.categories[0].id,
       });
     }

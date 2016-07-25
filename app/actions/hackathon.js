@@ -4,19 +4,15 @@
 import { database } from './firebase';
 
 // types
-import { Action, ThunkAction, Hackathon, Categories } from './types';
+import {
+  Action, ThunkAction, Hackathon,
+  Categories, Prizes,
+} from './types';
 
 // actions
 import { openSnackBar } from './navbar';
 
 // Actions related to the currently running hackathon
-const updateCurrentHackathon = (hackathon: Hackathon, categories: Categories): Action => ({
-  type: 'UPDATE_CURRENT_HACKATHON',
-  hackathon,
-  categories,
-});
-
-
 const addSubmissions = (submissions): Action => ({
   type: 'ADD_SUBMISSIONS',
   submissions,
@@ -44,17 +40,29 @@ const getSubmissions = (hackId: string): ThunkAction => async(dispatch) => {
   });
 };
 
+const updateCurrentHackathon = (
+  hackathon: Hackathon, categories: Categories, prizes: Prizes
+): Action => ({
+  type: 'UPDATE_CURRENT_HACKATHON',
+  hackathon,
+  categories,
+  prizes,
+});
+
 const getHackathon = (): ThunkAction => async(dispatch): Promise<void> => {
   // fetch the current hackathon's id and get the rest of the hackathon
   const hackId = await database.ref('currentHackathon').once('value');
   const hackathonId = hackId.val();
-  const [hackathon, categories] = await Promise.all([
+  const [hackathon, categories, prizes] = await Promise.all([
     database.ref('hackathons').child(hackathonId).once('value'),
     database.ref('categories').orderByChild('hackathonId').equalTo(hackathonId)
     .once('value'),
+    database.ref('prizes').orderByChild('hackathonId').equalTo(hackathonId)
+    .once('value'),
   ]);
   const cats = Object.values(categories.val() || {});
-  dispatch(updateCurrentHackathon(hackathon.val(), cats));
+  const prize = Object.values(prizes.val() || {});
+  dispatch(updateCurrentHackathon(hackathon.val(), cats, prize));
   dispatch(getSubmissions(hackathonId));
 };
 

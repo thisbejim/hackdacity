@@ -24,6 +24,7 @@ export type Hackathon = {
   id: ?string,
   submissions: Submissions,
   categories: Categories,
+  prizes: Prizes,
   tab: ?string
 }
 

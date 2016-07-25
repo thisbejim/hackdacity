@@ -127,7 +127,7 @@ export class Dashboard extends React.Component {
                 </List>
                 <IconButton
                   disabled={state.editDisabled}
-                  onTouchTap={() => dispatch(addPrize(category.id))}
+                  onTouchTap={() => dispatch(addPrize(category.id, selectedHackathon.id))}
                 >
                   <ContentAdd />
                 </IconButton>

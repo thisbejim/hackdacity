@@ -15,15 +15,11 @@ import { Row, Column } from '../grid/grid';
 import { signOut } from '../../actions/actions';
 
 // types
-import type { Admin } from '../../reducers/types';
-
-type State = {
-  admin: Admin
-}
+import type { User } from '../../reducers/types';
 
 type Props = {
   dispatch: () => void,
-  state: State
+  state: User
 }
 
 export const RightNavLoggedIn = (props: Props) => {

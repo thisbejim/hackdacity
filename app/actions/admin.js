@@ -132,9 +132,10 @@ const deletePrize = (id: string): Action => ({
   id,
 });
 
-const addPrize = (categoryId: string): Action => ({
+const addPrize = (categoryId: string, hackathonId: string): Action => ({
   type: 'ADD_PRIZE',
   categoryId,
+  hackathonId,
   id: database.ref().push().key,
 });
 

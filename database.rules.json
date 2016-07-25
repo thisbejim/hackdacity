@@ -34,6 +34,7 @@
       ".write": "root.child('admins').hasChild(auth.uid)",
     },
     "prizes": {
+      ".indexOn": ["hackathonId"],
       ".read": "true",
       ".write": "root.child('admins').hasChild(auth.uid)",
     },

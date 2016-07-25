@@ -24,11 +24,9 @@ import './app/css/style.css';
 
 // components
 import { NavBar } from './app/components/navbar/navbar';
-import { Rules } from './app/components/rules/rules';
-import { Prizes } from './app/components/prizes/prizes';
 import { Admin, Dashboard, Approve } from './app/components/admin/admin';
 import { Home } from './app/components/home/home';
-import { Submit } from './app/components/hackathon/submit';
+import { Submit, Prizes, Rules } from './app/components/hackathon/hackathon';
 // grid
 import { Container } from './app/components/grid/grid';
 

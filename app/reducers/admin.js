@@ -52,6 +52,7 @@ export const admin = (state : Admin = initialState, action: Action): Admin => {
         ...state.prizes,
         {
           categoryId: action.categoryId,
+          hackathonId: action.hackathonId,
           id: action.id,
           text: '',
         },

@@ -15,15 +15,11 @@ import { Row, Column } from '../grid/grid';
 import { toggleAuthDialogOpen } from '../../actions/actions';
 
 // types
-import type { Admin } from '../../reducers/types';
-
-type State = {
-  admin: Admin
-}
+import type { User } from '../../reducers/types';
 
 type Props = {
   dispatch: () => void,
-  state: State
+  state: User
 }
 
 export const RightNavLoggedOut = (props: Props) => {
@@ -36,7 +32,7 @@ export const RightNavLoggedOut = (props: Props) => {
         primaryText="Admin"
         onTouchTap={() => browserHistory.push('/admin/dashboard')}
       />
-  );
+    );
   }
   return (
     <Row>
