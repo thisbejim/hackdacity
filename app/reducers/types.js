@@ -1,4 +1,5 @@
-import type { Categories, Submissions, Hackathons } from '../actions/types';
+// @flow
+import type { Categories, Submissions, Hackathons, Applicants, Prizes } from '../actions/types';
 
 export type User = {
   signedIn: boolean,
@@ -31,6 +32,9 @@ type Auth = {
   open: boolean,
   loading: boolean,
   error: ?string,
+  name: string,
+  email: string,
+  password: string
 }
 
 export type Dialogs = {

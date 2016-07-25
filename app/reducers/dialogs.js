@@ -9,6 +9,9 @@ const initialState = {
     open: false,
     loading: false,
     error: null,
+    name: '',
+    email: '',
+    password: '',
   },
 };
 
@@ -35,6 +38,11 @@ export const dialogs = (state : Dialogs = initialState, action: Action): Dialogs
     case 'AUTH_MODAL_LOADING_OFF': {
       const newState = Object.assign(state.auth, { loading: false });
       return Object.assign({}, state, { auth: newState });
+    }
+    case 'UPDATE_DIALOG_FORM': {
+      const value = { [action.prop]: action.value };
+      const form = Object.assign({}, state[action.form], value);
+      return Object.assign({}, state, { [action.form]: form });
     }
     default:
       return state;

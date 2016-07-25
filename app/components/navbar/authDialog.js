@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 
+
 // material-ui
 import {
   Dialog, TextField, FlatButton,
@@ -10,7 +11,7 @@ import {
 // actions
 import {
   toggleAuthDialogOpen, toggleAuthPage, signIn,
-  signUp,
+  signUp, updateDialogForm,
 } from '../../actions/actions';
 
 // types
@@ -28,77 +29,24 @@ type Props = {
 export const AuthDialog = (props: Props) => {
   const dispatch = props.dispatch;
   const dialog = props.state.dialogs.auth;
-  let email;
-  let password;
-  let name;
   const loading = dialog.loading ? <LinearProgress mode="indeterminate" /> : null;
   const page = dialog.page === 'signIn'
-  ? (
-    <span>
-      <TextField
-        key="Email"
-        hintText="Email"
-        floatingLabelText="Email"
-        fullWidth
-        onChange={
-          (evt, value) => {
-            email = value;
-          }
-        }
-      />
-      <br />
-      <TextField
-        key="Password"
-        hintText="Password"
-        floatingLabelText="Password"
-        fullWidth
-        onChange={
-          (evt, value) => {
-            password = value;
-          }
-        }
-      />
-    </span>
-  )
-  : (
-    <span>
-      <TextField
-        key="FullName"
-        hintText="Full Name"
-        floatingLabelText="Full Name"
-        fullWidth
-        onChange={
-          (evt, value) => {
-            name = value;
-          }
-        }
-      />
-      <br />
-      <TextField
-        key="Email"
-        hintText="Email"
-        floatingLabelText="Your Udacity Email"
-        fullWidth
-        onChange={
-          (evt, value) => {
-            email = value;
-          }
-        }
-      />
-      <br />
-      <TextField
-        key="Password"
-        hintText="Password"
-        floatingLabelText="Password"
-        fullWidth
-        onChange={
-          (evt, value) => {
-            password = value;
-          }
-        }
-      />
-    </span>
-  );
+  ?
+    <SignInForm
+      dispatch={dispatch}
+      name={dialog.name}
+      email={dialog.email}
+      password={dialog.password}
+      error={dialog.error}
+    />
+  :
+    <SignUpForm
+      dispatch={dispatch}
+      name={dialog.name}
+      email={dialog.email}
+      password={dialog.password}
+      error={dialog.error}
+    />;
 
   const actions = dialog.page === 'signIn'
     ? [
@@ -112,7 +60,7 @@ export const AuthDialog = (props: Props) => {
       <FlatButton
         style={style.actionButton}
         label="Sign in"
-        onTouchTap={() => dispatch(signIn(email, password))}
+        onTouchTap={() => dispatch(signIn(dialog.email, dialog.password))}
       />,
       loading,
     ]
@@ -127,7 +75,7 @@ export const AuthDialog = (props: Props) => {
       <FlatButton
         style={style.actionButton}
         label="Sign Up"
-        onTouchTap={() => dispatch(signUp(name, email, password))}
+        onTouchTap={() => dispatch(signUp(dialog.name, dialog.email, dialog.password))}
       />,
       loading,
     ];
@@ -150,6 +98,77 @@ export const AuthDialog = (props: Props) => {
     </div>
   );
 };
+
+type FormProps = {
+  dispatch: () => void,
+  name: string,
+  email: string,
+  password: string,
+  error: ?string
+}
+
+const SignInForm = (props: FormProps) =>
+  <span>
+    <TextField
+      key="Email"
+      hintText="Email"
+      floatingLabelText="Email"
+      fullWidth
+      value={props.email}
+      onChange={(evt, value) => props.dispatch(
+        updateDialogForm('auth', 'email', value)
+      )}
+    />
+    <br />
+    <TextField
+      key="Password"
+      hintText="Password"
+      floatingLabelText="Password"
+      fullWidth
+      value={props.password}
+      onChange={(evt, value) => props.dispatch(
+        updateDialogForm('auth', 'password', value)
+      )}
+      errorText={props.error}
+    />
+  </span>;
+
+const SignUpForm = (props: FormProps) =>
+  <span>
+    <TextField
+      key="FullName"
+      hintText="Full Name"
+      floatingLabelText="Full Name"
+      fullWidth
+      value={props.name}
+      onChange={(evt, value) => props.dispatch(
+        updateDialogForm('auth', 'name', value)
+      )}
+    />
+    <br />
+    <TextField
+      key="Email"
+      hintText="Email"
+      floatingLabelText="Email"
+      fullWidth
+      value={props.email}
+      onChange={(evt, value) => props.dispatch(
+        updateDialogForm('auth', 'email', value)
+      )}
+    />
+    <br />
+    <TextField
+      key="Password"
+      hintText="Password"
+      floatingLabelText="Password"
+      fullWidth
+      value={props.password}
+      onChange={(evt, value) => props.dispatch(
+        updateDialogForm('auth', 'password', value)
+      )}
+      errorText={props.error}
+    />
+  </span>;
 
 const style = {
   actionContainer: {

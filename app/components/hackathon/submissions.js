@@ -76,7 +76,7 @@ export const Submissions = (props: Props) => {
 };
 
 type ButtonProps = {
-  uid: string,
+  uid: ?string,
   submission: Submission,
   dispatch: () => void
 };

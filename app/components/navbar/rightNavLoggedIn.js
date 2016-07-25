@@ -43,6 +43,7 @@ export const RightNavLoggedIn = (props: Props) => {
       {/* desktop/iPad */}
       <Column md={12} hiddenXs>
         {admin}
+        <FlatButton label="Submit" onTouchTap={() => browserHistory.push('/submit')} />
         <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules')} />
         <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes')} />
         <IconMenu
@@ -69,6 +70,7 @@ export const RightNavLoggedIn = (props: Props) => {
           anchorOrigin={style.target}
         >
           {adminMobile}
+          <MenuItem primaryText="Submit" onTouchTap={() => browserHistory.push('/submit')} />
           <MenuItem primaryText="Rules" onTouchTap={() => browserHistory.push('/rules')} />
           <MenuItem primaryText="Prizes" onTouchTap={() => browserHistory.push('/prizes')} />
           <MenuItem primaryText="Sign out" onTouchTap={() => props.dispatch(signOut())} />

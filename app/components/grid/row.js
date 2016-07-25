@@ -1,41 +1,54 @@
+// @flow
 import React from 'react';
 
 import styles from './grid.css';
 
 import classNames from 'classnames';
 
-export const Row = (props) => {
+type Props = {
+  hiddenLg?: boolean,
+  hiddenMd?: boolean,
+  hiddenSm?: boolean,
+  hiddenXs?: boolean,
+  visibleLg?: boolean,
+  visibleMd?: boolean,
+  visibleSm?: boolean,
+  visibleXs?: boolean,
+  children?: any
+}
+
+export const Row = ({
+  hiddenLg = false,
+  hiddenMd = false,
+  hiddenSm = false,
+  hiddenXs = false,
+  visibleLg = false,
+  visibleMd = false,
+  visibleSm = false,
+  visibleXs = false,
+  children = null,
+}: Props) => {
   const rowClass = classNames(
     // row
-    styles["row"],
+    styles.row,
     // hidden
-    props.hiddenLg ? styles["hiddenLg"] : null,
-    props.hiddenSm ? styles["hiddenSm"]: null,
-    props.hiddenSm ? styles["hiddenSm"]: null,
-    props.hiddenXs ? styles["hiddenXs"] : null,
+    hiddenLg ? styles.hiddenLg : null,
+    hiddenMd ? styles.hiddenMd : null,
+    hiddenSm ? styles.hiddenSm : null,
+    hiddenXs ? styles.hiddenXs : null,
     // visible
-    props.visibleLg ? styles["visibleLg"] : null,
-    props.visibleSm ? styles["visibleSm"]: null,
-    props.visibleSm ? styles["visibleSm"]: null,
-    props.visibleXs ? styles["visibleXs"] : null
+    visibleLg ? styles.visibleLg : null,
+    visibleMd ? styles.visibleMd : null,
+    visibleSm ? styles.visibleSm : null,
+    visibleXs ? styles.visibleXs : null
   );
   return (
     <div className={rowClass}>
-      {props.children}
+      {children}
     </div>
-  )
-}
-
-Row.propTypes = {
-  hiddenLg: React.PropTypes.bool,
-  hiddenMd: React.PropTypes.bool,
-  hiddenSm: React.PropTypes.bool,
-  hiddenXs: React.PropTypes.bool,
-  hiddenLg: React.PropTypes.bool,
-  hiddenMd: React.PropTypes.bool,
-  hiddenSm: React.PropTypes.bool,
-  hiddenXs: React.PropTypes.bool,
+  );
 };
+
 Row.defaultProps = {
   hiddenLg: false,
   hiddenMd: false,
@@ -45,4 +58,5 @@ Row.defaultProps = {
   visibleMd: false,
   visibleSm: false,
   visibleXs: false,
+  children: null,
 };

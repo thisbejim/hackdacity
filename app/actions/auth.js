@@ -41,6 +41,13 @@ const authDialogLoadingOff = (): Action => ({
   type: 'AUTH_MODAL_LOADING_OFF',
 });
 
+const updateDialogForm = (form: string, prop: string, value: string): Action => ({
+  type: 'UPDATE_DIALOG_FORM',
+  form,
+  prop,
+  value,
+});
+
 // Sign in
 const toggleAuthPage = (): Action => ({
   type: 'TOGGLE_AUTH_PAGE',
@@ -90,17 +97,13 @@ const signedOut = (): Action => ({
 });
 
 const signOut = (): ThunkAction => async(dispatch): Promise<void> => {
-  try {
-    await auth.signOut();
-    dispatch(signedOut());
-  } catch (e) {
-    console.log(e);
-  }
+  await auth.signOut();
+  dispatch(signedOut());
 };
 
 module.exports = {
   checkAuth, toggleAuthDialogOpen, authDialogLoadingOn,
   authDialogLoadingOff, toggleAuthPage, signInError,
   signedIn, signIn, signUp,
-  signedOut, signOut,
+  signedOut, signOut, updateDialogForm,
 };

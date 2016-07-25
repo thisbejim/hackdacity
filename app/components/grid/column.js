@@ -1,58 +1,62 @@
+// @flow
+
 import React from 'react';
 
 import styles from './grid.css';
 
 import classNames from 'classnames';
 
-export const Column = (props) => {
+type Props = {
+  lg?: ?number,
+  md?: ?number,
+  sm?: ?number,
+  xs?: ?number,
+  hiddenLg?: boolean,
+  hiddenMd?: boolean,
+  hiddenSm?: boolean,
+  hiddenXs?: boolean,
+  visibleLg?: boolean,
+  visibleMd?: boolean,
+  visibleSm?: boolean,
+  visibleXs?: boolean,
+  children?: ?any
+}
+
+export const Column = ({
+  lg,
+  md,
+  sm,
+  xs,
+  hiddenLg = false,
+  hiddenMd = false,
+  hiddenSm = false,
+  hiddenXs = false,
+  visibleLg = false,
+  visibleMd = false,
+  visibleSm = false,
+  visibleXs = false,
+  children,
+}: Props) => {
   const columnClass = classNames(
     // column widths
-    styles["colLg"+props.lg],
-    styles["colMd"+props.md],
-    styles["colSm"+props.sm],
-    styles["colXs"+props.xs],
+    lg ? styles[`colLg${lg}`] : null,
+    md ? styles[`colMd${md}`] : null,
+    sm ? styles[`colSm${sm}`] : null,
+    xs ? styles[`colXs${xs}`] : null,
     // hidden
-    props.hiddenLg ? styles["hiddenLg"] : null,
-    props.hiddenSm ? styles["hiddenSm"]: null,
-    props.hiddenSm ? styles["hiddenSm"]: null,
-    props.hiddenXs ? styles["hiddenXs"] : null,
+    hiddenLg ? styles.hiddenLg : null,
+    hiddenMd ? styles.hiddenMd : null,
+    hiddenSm ? styles.hiddenSm : null,
+    hiddenXs ? styles.hiddenXs : null,
     // visible
-    props.visibleLg ? styles["visibleLg"] : null,
-    props.visibleSm ? styles["visibleSm"]: null,
-    props.visibleSm ? styles["visibleSm"]: null,
-    props.visibleXs ? styles["visibleXs"] : null
+    visibleLg ? styles.visibleLg : null,
+    visibleMd ? styles.visibleMd : null,
+    visibleSm ? styles.visibleSm : null,
+    visibleXs ? styles.visibleXs : null
   );
   return (
     <div className={columnClass}>
-      {props.children}
+      {children}
     </div>
-  )
-}
-Column.propTypes = {
-  lg: React.PropTypes.number,
-  md: React.PropTypes.number,
-  sm: React.PropTypes.number,
-  xs: React.PropTypes.number,
-  hiddenLg: React.PropTypes.bool,
-  hiddenMd: React.PropTypes.bool,
-  hiddenSm: React.PropTypes.bool,
-  hiddenXs: React.PropTypes.bool,
-  hiddenLg: React.PropTypes.bool,
-  hiddenMd: React.PropTypes.bool,
-  hiddenSm: React.PropTypes.bool,
-  hiddenXs: React.PropTypes.bool,
-};
-Column.defaultProps = {
-  lg: null,
-  md: null,
-  sm: null,
-  xs: null,
-  hiddenLg: false,
-  hiddenMd: false,
-  hiddenSm: false,
-  hiddenXs: false,
-  visibleLg: false,
-  visibleMd: false,
-  visibleSm: false,
-  visibleXs: false,
+  );
 };

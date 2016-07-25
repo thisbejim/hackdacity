@@ -32,7 +32,8 @@ export type Action =
   | { type: "TOGGLE_AUTH_DIALOG_OPEN" }
   | { type: "AUTH_MODAL_LOADING_ON" }
   | { type: "AUTH_MODAL_LOADING_OFF" }
-  | { type: "TOGGLE_AUTH_PAGE" }
+  | { type: "UPDATE_DIALOG_FORM", form: string, prop: string, value: string}
+  | { type: "TOGGLE_AUTH_PAGE", name: string, email: string, password: string }
   | { type: "SIGN_IN_ERROR", error: string }
   | { type: "SIGNED_IN", uid: string, displayName?: string }
   | { type: "SIGNED_OUT" }

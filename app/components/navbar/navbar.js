@@ -37,8 +37,8 @@ export const NavBar = (props: Props) => {
   const navbar = props.state.navbar;
 
   const rightNav = user.signedIn
-    ? <RightNavLoggedIn dispatch={dispatch} state={user} />
-    : <RightNavLoggedOut dispatch={dispatch} state={user} />;
+    ? <RightNavLoggedIn dispatch={dispatch} state={props.state} />
+    : <RightNavLoggedOut dispatch={dispatch} state={props.state} />;
 
   const loader = navbar.loading
     ? <LinearProgress mode="indeterminate" style={style.progress} />
