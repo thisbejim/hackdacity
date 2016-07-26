@@ -1,7 +1,7 @@
 // @flow
 
 // types
-import { Action } from './types';
+import type { Action } from './types';
 
 // Navbar
 const navBarLoadingOn = (): Action => ({

@@ -4,7 +4,7 @@
 import { auth, database, firebaseError } from './firebase';
 
 // types
-import { Action, ThunkAction } from './types';
+import type { Action, ThunkAction } from './types';
 
 // actions
 import { openSnackBar } from './navbar';

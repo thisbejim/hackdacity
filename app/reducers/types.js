@@ -19,8 +19,8 @@ export type Navbar = {
 }
 
 export type Hackathon = {
-  startDate: ?string,
-  endDate: ?string,
+  startDate: ?number,
+  endDate: ?number,
   id: ?string,
   submissions: Submissions,
   categories: Categories,
@@ -53,4 +53,11 @@ export type Admin = {
   editDisabled: boolean,
   categories: Categories,
   prizes: Prizes
+}
+
+export type Forms = {
+  submit: {
+    github: string,
+    members: Array<Object>,
+  },
 }

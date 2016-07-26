@@ -1,5 +1,5 @@
 // @flow
-import { Action } from '../actions/types';
+import type { Action } from '../actions/types';
 import type { Dialogs } from './types';
 
 

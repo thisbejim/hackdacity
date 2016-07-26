@@ -40,7 +40,8 @@ export const admin = (state : Admin = initialState, action: Action): Admin => {
     }
 
     case 'DELETE_PRIZE': {
-      const index = state.prizes.findIndex((p) => p.id === action.id);
+      const { id } = action;
+      const index = state.prizes.findIndex((p) => p.id === id);
       const prizes = state.prizes.slice(0, index).concat(
         state.prizes.slice(index + 1)
       );
@@ -61,24 +62,26 @@ export const admin = (state : Admin = initialState, action: Action): Admin => {
     }
 
     case 'UPDATE_PRIZE': {
+      const { id, text } = action;
       const prizes = state.prizes.map((prize) => {
-        if (prize.id !== action.id) {
+        if (prize.id !== id) {
           return prize;
         }
         return {
           ...prize,
-          text: action.text,
+          text,
         };
       });
       return Object.assign({}, state, { prizes });
     }
 
     case 'ADD_PRIZE_CATEGORY': {
+      const { hackathonId, id } = action;
       const categories = [
         ...state.categories,
         {
-          hackathonId: action.hackathonId,
-          id: action.id,
+          hackathonId,
+          id,
           name: '',
         },
       ];
@@ -86,21 +89,23 @@ export const admin = (state : Admin = initialState, action: Action): Admin => {
     }
 
     case 'UPDATE_CATEGORY': {
+      const { id, name } = action;
       const categories = state.categories.map((category) => {
-        if (category.id !== action.id) {
+        if (category.id !== id) {
           return category;
         }
         return {
           ...category,
-          name: action.name,
+          name,
         };
       });
       return Object.assign({}, state, { categories });
     }
 
     case 'DELETE_CATEGORY': {
-      const categories = state.categories.filter((c) => c.id !== action.categoryId);
-      const prizes = state.prizes.filter((p) => p.categoryId !== action.categoryId);
+      const { categoryId } = action;
+      const categories = state.categories.filter((c) => c.id !== categoryId);
+      const prizes = state.prizes.filter((p) => p.categoryId !== categoryId);
       return Object.assign({}, state, {
         categories,
         prizes,
@@ -108,19 +113,22 @@ export const admin = (state : Admin = initialState, action: Action): Admin => {
     }
 
     case 'UPDATE_DATE': {
+      const { id, date, dateType } = action;
       const hackathons = state.hackathons.map((hackathon) => {
-        if (hackathon.id !== action.id) {
+        if (hackathon.id !== id) {
           return hackathon;
         }
-        if (action.dateType === 'startDate') {
+        // change startDate
+        if (dateType === 'startDate') {
           return {
             ...hackathon,
-            startDate: action.date,
+            startDate: date,
           };
         }
+        // change endDate
         return {
           ...hackathon,
-          endDate: action.date,
+          endDate: date,
         };
       });
       return Object.assign({}, state, { hackathons });

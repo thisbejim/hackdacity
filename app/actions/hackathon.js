@@ -4,7 +4,7 @@
 import { database } from './firebase';
 
 // types
-import {
+import type {
   Action, ThunkAction, Hackathon,
   Categories, Prizes,
 } from './types';

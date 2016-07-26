@@ -5,7 +5,7 @@ import React from 'react';
 import moment from 'moment';
 
 // components
-import { Submissions } from '../hackathon/hackathon';
+import { Submissions, Winners } from '../hackathon/hackathon';
 import { Row, Column } from '../grid/grid';
 
 // types
@@ -43,11 +43,7 @@ export const Home = (props: Props) => {
       );
     }
     return (
-      <Row>
-        <Column md={12}>
-          <h1>Hackdacity is over!</h1>
-        </Column>
-      </Row>
+      <Winners state={props.state} dispatch={props.dispatch} />
     );
   }
   return (

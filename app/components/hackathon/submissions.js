@@ -34,17 +34,21 @@ export const Submissions = (props: Props) => {
 
   const categories = props.state.hackathon.categories.map((category) => {
     // filter submissions by category id
-    const submissions = props.state.hackathon.submissions.filter(
-      (s) => s.categories.hasOwnProperty(category.id)
+    const subs = props.state.hackathon.submissions.filter(
+      (s) => s.categoryId === category.id
       // map each submission to component
       ).map((submission, index) =>
         <SubmissionCard
+          key={submission.id}
           uid={uid}
           index={index}
           submission={submission}
           dispatch={props.dispatch}
         />
     );
+    const submissions = subs.length > 0
+      ? subs
+      : <p style={{ margin: 14 }}>No submissions in this category yet!</p>;
     return (
       <Tab key={category.id} label={category.name} value={category.id}>
         <Row>

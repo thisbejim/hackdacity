@@ -162,12 +162,23 @@ const deleteCategory = (categoryId: string): Action => ({
   categoryId,
 });
 
-const updateDate = (id: string, date: Date, dateType: string): Action => ({
-  type: 'UPDATE_DATE',
-  id,
-  date: date.getTime(),
-  dateType,
-});
+const updateDate = (id: string, date: Date, dateType: string): Action => {
+  return (
+  {
+    type: 'UPDATE_DATE',
+    id,
+    date: date.getTime(),
+    dateType,
+  }
+);
+};
+
+// const updateDate = (id: string, date: Date, dateType: string): Action => ({
+//   type: 'UPDATE_DATE',
+//   id,
+//   date: String(date.getTime()),
+//   dateType,
+// });
 
 /**
  * Reduce prizes, prize categories, and hackathons to objects

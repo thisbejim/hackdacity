@@ -17,9 +17,8 @@ The relevant security rule:
 ```
 "votes": {
   "$user_id": {
-    ".read": "true",
-    ".write": "$user_id === auth.uid",
+    ".write": "$user_id === auth.uid && root.child('alumni').hasChild(auth.uid)",
     ".validate": "newData.val() == true || newData.val() == null"
   }
-}
+},
 ```

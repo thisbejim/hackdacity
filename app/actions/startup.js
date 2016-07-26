@@ -6,7 +6,7 @@ import { checkAuth } from './auth';
 import { getHackathon } from './hackathon';
 
 // types
-import { ThunkAction } from './types';
+import type { ThunkAction } from './types';
 
 // Start up
 const startUp = (): ThunkAction => async(dispatch): Promise<void> => {
