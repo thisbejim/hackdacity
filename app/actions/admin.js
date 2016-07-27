@@ -54,13 +54,19 @@ const invalidApplicant = (userId: string): ThunkAction => async(): Promise<void>
 };
 
 const validApplicant = (
-  userId: string, name: string, email: string, token: string
+  uid: string, name: string, userName: string, email: string, token: string
 ): ThunkAction => async(): Promise<void> => {
   try {
+    console.log("valid", uid, name, userName, email)
     await Promise.all([
-      database.ref('alumni').child(userId).set(true),
-      database.ref('applied').child(userId).remove(),
-      database.ref('users').child(userId).set({ name }),
+      database.ref('applied').child(uid).remove(),
+      database.ref('alumni').child(uid).set(
+        {
+          name,
+          uid,
+          userName: userName.toLowerCase(),
+        }
+      ),
       addUserToSlack(email, token),
     ]);
   } catch (e) {
@@ -76,10 +82,16 @@ const addApplicants = (applicants: Applicants): Action => ({
 const getApplicants = (): ThunkAction => (dispatch): void => {
   dispatch(navBarLoadingOn());
   database.ref('applied').orderByChild('date').on('value', (snapshot) => {
-    const applicants = Object.values(snapshot.val());
+    const snapshotVal = snapshot.val();
+    if (snapshotVal) {
+      const applicants = Object.values(snapshotVal);
+      dispatch(addApplicants(applicants));
+    } else {
+      const clearApplicants = [];
+      dispatch(addApplicants(clearApplicants));
+    }
     dispatch(navBarLoadingOff());
-    dispatch(addApplicants(applicants));
-  });
+  }, (e) => console.log(e));
 };
 
 const detachApplicantListener = (): ThunkAction => (): void => {

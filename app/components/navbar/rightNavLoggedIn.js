@@ -39,6 +39,7 @@ export const RightNavLoggedIn = (props: Props) => {
       {/* desktop/iPad */}
       <Column md={12} hiddenXs>
         {admin}
+        <FlatButton label="Approve" onTouchTap={() => browserHistory.push('/admin/approve')} />
         <FlatButton label="Submit" onTouchTap={() => browserHistory.push('/submit')} />
         <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules')} />
         <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes')} />

@@ -37,9 +37,11 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "is-github-url": "^1.2.2",
     "material-ui": "^0.15.1",
     "moment": "^2.14.1",
     "react": "^15.2.0",
+    "react-cropper": "^0.8.0",
     "react-dom": "^15.2.0",
     "react-redux": "^4.4.5",
     "react-reformed": "^0.4.2",

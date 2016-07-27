@@ -43,6 +43,7 @@ export const AuthDialog = (props: Props) => {
     <SignUpForm
       dispatch={dispatch}
       name={dialog.name}
+      userName={dialog.userName}
       email={dialog.email}
       password={dialog.password}
       error={dialog.error}
@@ -75,7 +76,7 @@ export const AuthDialog = (props: Props) => {
       <FlatButton
         style={style.actionButton}
         label="Sign Up"
-        onTouchTap={() => dispatch(signUp(dialog.name, dialog.email, dialog.password))}
+        onTouchTap={() => dispatch(signUp(dialog.name, dialog.userName, dialog.email, dialog.password))}
       />,
       loading,
     ];
@@ -144,6 +145,18 @@ const SignUpForm = (props: FormProps) =>
       onChange={(evt, value) => props.dispatch(
         updateDialogForm('auth', 'name', value)
       )}
+    />
+    <br />
+    <TextField
+      key="UserName"
+      hintText="User Name"
+      floatingLabelText="User Name"
+      fullWidth
+      value={props.userName}
+      onChange={(evt, value) => props.dispatch(
+        updateDialogForm('auth', 'userName', value)
+      )}
+      errorText={props.error}
     />
     <br />
     <TextField

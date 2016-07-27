@@ -10,6 +10,7 @@ const initialState = {
     loading: false,
     error: null,
     name: '',
+    userName: '',
     email: '',
     password: '',
   },

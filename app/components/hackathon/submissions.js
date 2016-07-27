@@ -10,6 +10,9 @@ import {
 // components
 import { Row, Column } from '../grid/grid';
 
+// css
+import responsive from '../../css/responsive.css';
+
 // actions
 import { changeTab, upvote, cancelVote } from '../../actions/actions';
 
@@ -48,7 +51,7 @@ export const Submissions = (props: Props) => {
     );
     const submissions = subs.length > 0
       ? subs
-      : <p style={{ margin: 14 }}>No submissions in this category yet!</p>;
+      : <p style={style.noSubmissions}>No submissions in this category yet!</p>;
     return (
       <Tab key={category.id} label={category.name} value={category.id}>
         <Row>
@@ -87,8 +90,8 @@ const SubmissionCard = (props: CardProps) => {
     <Column key={props.index} md={4} sm={6}>
       <Card style={style.card}>
         <CardHeader title={"test"} />
-        <CardMedia mediaStyle={style.cardMedia} >
-          <img src={'http://placehold.it/350x350'} alt={"test"} />
+        <CardMedia mediaStyle={style.cardMedia}>
+          <img className={responsive.imgResponsive} src={'http://placehold.it/350x350'} alt={"test"} />
         </CardMedia>
         <CardActions>
           {voteButton}
@@ -130,8 +133,7 @@ const style = {
     borderStyle: 'solid',
   },
   cardMedia: {
-    height: 200,
-    overflow: 'hidden',
+    height: 300,
   },
   tabContainer: {
     borderTopLeftRadius: 3,
@@ -142,5 +144,8 @@ const style = {
   },
   upvote: {
     color: 'white',
+  },
+  noSubmissions: {
+    marginLeft: 14,
   },
 };

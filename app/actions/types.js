@@ -71,7 +71,8 @@ export type Applicants = Array<Applicant>;
 type Applicant = {
   email: string,
   id: string,
-  name: string
+  name: string,
+  username: string,
 };
 
 export type Prizes = Array<Prize>;

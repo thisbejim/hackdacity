@@ -5,7 +5,7 @@ export type User = {
   signedIn: boolean,
   admin: boolean,
   uid: ?string,
-  displayName: ?string
+  username: ?string
 }
 
 type Snackbar = {
@@ -34,6 +34,7 @@ type Auth = {
   loading: boolean,
   error: ?string,
   name: string,
+  userName: string,
   email: string,
   password: string
 }

@@ -5,18 +5,16 @@
       ".write": "root.child('admins').hasChild(auth.uid)",
     },
     "alumni": {
-      ".read": "root.child('admins').hasChild(auth.uid)",
-      ".write": "root.child('admins').hasChild(auth.uid)"
+      ".read": "true",
+    	".indexOn": ["userName"],
+      "$user_id": {
+      	".write": "root.child('admins').hasChild(auth.uid) || $user_id === auth.uid && data.exists()"
+       }
     },
     "applied": {
-      "$application_id": {
-        ".read": "root.child('admins').hasChild(auth.uid)",
-        ".write": "root.child('admins').hasChild(auth.uid) || $application_id === auth.uid",
-      }
-    },
-    "users": {
+      ".indexOn": ["date"],
+      ".read": "root.child('admins').hasChild(auth.uid)",
       "$user_id": {
-        ".read": "true",
         ".write": "root.child('admins').hasChild(auth.uid) || $user_id === auth.uid",
       }
     },

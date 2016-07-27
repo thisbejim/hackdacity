@@ -6,7 +6,8 @@ const initialState = {
   signedIn: false,
   admin: false,
   uid: null,
-  displayName: null,
+  name: null,
+  userName: null,
 };
 
 export const user = (state : User = initialState, action: Action): User => {
@@ -15,7 +16,11 @@ export const user = (state : User = initialState, action: Action): User => {
       return Object.assign({}, state, {
         signedIn: true,
         uid: action.uid,
-        displayName: action.displayName,
+      });
+    case 'ADD_USER_DETAILS':
+      return Object.assign({}, state, {
+        name: action.name,
+        userName: action.userName,
       });
     case 'SIGNED_OUT':
       return Object.assign({}, state, initialState);

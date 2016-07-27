@@ -19,3 +19,7 @@ h2 {
 p {
   font-size: 16x;
 }
+
+img {
+  vertical-align: middle;
+}

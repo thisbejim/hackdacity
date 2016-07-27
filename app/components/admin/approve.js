@@ -38,14 +38,17 @@ export class Approve extends React.Component {
     const dispatch = this.props.dispatch;
     const admin = this.props.state;
     const applicants = admin.applicants.map((applicant) =>
-      <span key={applicant.id}>
+      <span key={applicant.uid}>
         <ListItem
           primaryText={applicant.email}
           secondaryText={applicant.name}
           leftCheckbox={
             <Checkbox
               onCheck={() => dispatch(
-                validApplicant(applicant.id, applicant.name, applicant.email, admin.slack.token)
+                validApplicant(
+                  applicant.uid, applicant.name, applicant.userName,
+                  applicant.email, admin.slack.token
+                )
               )}
             />
           }

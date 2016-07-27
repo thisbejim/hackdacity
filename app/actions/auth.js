@@ -10,18 +10,26 @@ import type { Action, ThunkAction } from './types';
 import { openSnackBar } from './navbar';
 import { isAdmin } from './admin';
 
-const signedIn = (uid: string, displayName: string): Action => ({
+const signedIn = (uid: string, name: ?string, userName: ?string): Action => ({
   type: 'SIGNED_IN',
   uid,
-  displayName,
+  name,
+  userName,
 });
 
 // Authentication handler
 const checkAuth = (): ThunkAction => (dispatch): void => {
-  auth.onAuthStateChanged((user) => {
+  auth.onAuthStateChanged(async(user) => {
     if (user) {
       // User is signed in.
-      dispatch(signedIn(user.uid, user.displayName));
+      const d = await database.ref('alumni').child(user.uid).once('value');
+      const details = d.val();
+      console.log(details)
+      if (details) {
+        dispatch(signedIn(user.uid, details.name, details.userName));
+      } else {
+        dispatch(signedIn(user.uid));
+      }
       dispatch(openSnackBar('Signed In'));
       dispatch(isAdmin(user.uid));
     }
@@ -70,7 +78,7 @@ const signIn = (email: string, password: string): ThunkAction => async(dispatch)
 
 // Sign up
 const signUp = (
-  name: string, email: string, password: string
+  name: string, userName: string, email: string, password: string
 ): ThunkAction => async(dispatch): Promise<void> => {
   try {
     dispatch(authDialogLoadingOn());
@@ -81,6 +89,7 @@ const signUp = (
     await database.ref('applied').child(uid).set({
       uid,
       name,
+      userName,
       email,
       date: new Date().getTime(),
     });
