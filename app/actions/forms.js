@@ -87,6 +87,8 @@ const submitForms = {
           id: submissionId,
           members,
           image: downloadURL,
+          title: form.title,
+          description: form.description,
         };
         updates[`/submissions/${submissionId}`] = data;
         await database.ref().update(updates, (e) => console.log(e));
@@ -97,12 +99,16 @@ const submitForms = {
 };
 
 const validateField = (form: string, prop: string, value: string) => (dispatch) => {
-  const { valid, message } = validations[form][prop](value);
-  if (valid) {
-    dispatch(clearFormError(form, prop));
-    dispatch(updateForm(form, prop, value));
+  if (validations[form].hasOwnProperty(prop)) {
+    const { valid, message } = validations[form][prop](value);
+    if (valid) {
+      dispatch(clearFormError(form, prop));
+      dispatch(updateForm(form, prop, value));
+    } else {
+      dispatch(formError(form, prop, message));
+    }
   } else {
-    dispatch(formError(form, prop, message));
+    dispatch(updateForm(form, prop, value));
   }
 };
 

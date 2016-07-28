@@ -93,14 +93,13 @@ const SubmissionCard = (props: CardProps) => {
   return (
     <Column key={props.index} md={4} sm={6}>
       <Card style={style.card}>
-        <CardHeader title={"test"} />
+        <CardHeader title={props.submission.title} />
         <CardMedia mediaStyle={style.cardMedia}>
           <img className={responsive.imgResponsive} src={props.submission.image} alt={"test"} />
         </CardMedia>
         <CardText>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa.
-    </CardText>
+          {props.submission.description}
+        </CardText>
         <CardActions>
           {voteButton}
         </CardActions>

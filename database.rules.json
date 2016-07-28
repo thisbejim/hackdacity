@@ -40,28 +40,38 @@
       ".read": "root.child('admins').hasChild(auth.uid)",
       ".write": "root.child('admins').hasChild(auth.uid)",
     },
-    "$submission" : {
-      ".write": "auth != null && root.child('alumni').hasChild(auth.uid)",
-      "members": {
-        ".validate": "newData.hasChild(auth.uid)"
-      },
-      "hackathonId": {
-        ".validate": "root.child('hackathons').hasChild(newData.val())"
-      },
-      "categoryId": {
-        ".validate": "root.child('categories').hasChild(newData.val())"
-      },
-      "id": {
-        ".validate": "$submission === newData.val()"
-      },
-      "image": {
-        ".validate": "newData.val() != null"
-      },
-      "votes": {
-        "$user_id": {
-          ".validate": "$user_id === auth.uid && newData.val() == true || newData.val() == null"
-        }
-      },
+    "submissions": {
+      ".read": "true",
+      ".indexOn": ["hackathonId"],
+      "$submission" : {
+        ".write": "auth != null && root.child('alumni').hasChild(auth.uid)",
+        "members": {
+          ".validate": "newData.hasChild(auth.uid)"
+        },
+        "hackathonId": {
+          ".validate": "root.child('hackathons').hasChild(newData.val())"
+        },
+        "categoryId": {
+          ".validate": "root.child('categories').hasChild(newData.val())"
+        },
+        "id": {
+          ".validate": "$submission === newData.val()"
+        },
+        "image": {
+          ".validate": "newData.val() != null"
+        },
+        "title": {
+          ".validate": "newData.val() != null"
+        },
+        "description": {
+          ".validate": "newData.val() != null"
+        },
+        "votes": {
+          "$user_id": {
+            ".validate": "$user_id === auth.uid && newData.val() == true || newData.val() == null"
+          }
+        },
+      }
     }
   }
 }

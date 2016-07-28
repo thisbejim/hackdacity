@@ -88,13 +88,25 @@ export class Submit extends React.Component {
           </Row>
           <Row>
             <Column md={12}>
-              <p>Project Title</p>
+              <p>Title</p>
               <TextField
                 key="title"
                 hintText="Title"
                 fullWidth
                 errorText={form.errors.title}
                 onChange={(event) => dispatch(validateField('submit', 'title', event.target.value))}
+              />
+            </Column>
+          </Row>
+          <Row>
+            <Column md={12}>
+              <p>Description</p>
+              <TextField
+                key="description"
+                hintText="Description"
+                fullWidth
+                errorText={form.errors.title}
+                onChange={(event) => dispatch(validateField('submit', 'description', event.target.value))}
               />
             </Column>
           </Row>

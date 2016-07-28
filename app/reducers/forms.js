@@ -6,6 +6,7 @@ import type { Forms } from './types';
 const initialState = {
   submit: {
     title: '',
+    description: '',
     github: '',
     members: [],
     selectedImage: null,
