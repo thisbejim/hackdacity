@@ -8,13 +8,14 @@ const initialState = {
     title: '',
     github: '',
     members: [],
-    image: null,
+    selectedImage: null,
+    croppedImage: null,
     hackathonId: null,
-    categories: ['-KNVxyrOenoOiD3jwZqi'],
+    categories: ['-KN0slKjWawdawdaw'],
     errors: {
       title: '',
       github: '',
-      image: '',
+      croppedImage: '',
     },
   },
   autoComplete: {

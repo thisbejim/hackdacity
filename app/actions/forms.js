@@ -1,8 +1,6 @@
 // Forms
 // firebase
-import {
-  database,
-} from './firebase';
+import { database, storage } from './firebase';
 // isGithubUrl
 import isGithubUrl from 'is-github-url';
 
@@ -19,15 +17,7 @@ const updateForm = (form: string, prop: string, value: string): Action => ({
 const processFormImage = (form: string, prop: string, value: string) => (dispatch) => {
   const reader = new FileReader();
   reader.onload = (e) => {
-    const image = new Image();
-    image.src = e.target.result;
-    image.onload = () => {
-      if (image.width !== 350 && image.height !== 350) {
-        dispatch(formError(form, prop, 'Image must be 350x350.'));
-      } else {
-        dispatch(updateForm(form, prop, e.target.result));
-      }
-    };
+    dispatch(updateForm(form, prop, e.target.result));
   };
   reader.readAsDataURL(value);
 };
@@ -50,11 +40,31 @@ const validations = {
       }
       return { valid: true, message: null };
     },
+    croppedImage: (value) => {
+      if (!value) {
+        return { valid: false, message: 'Project image required' };
+      }
+      return { valid: true, message: null };
+    },
   },
 };
 
+const dataURItoBlob = (dataURI) => {
+  let i = 0;
+  const binary = atob(dataURI.split(',')[1]);
+  const array = [];
+  while (i < binary.length) {
+    array.push(binary.charCodeAt(i));
+    i++;
+  }
+  return new Blob([new Uint8Array(array)], {
+    type: 'image/jpeg',
+  });
+};
+
 const submitForms = {
-  submit: async(form) => {
+  submit: (form) => {
+    // start loading indicator
     form.categories.forEach((categoryId) => {
       const submissionId = database.ref('submissions').push().key;
       const members = form.members.reduce((previous, current) => {
@@ -62,40 +72,28 @@ const submitForms = {
         return previous;
       }, {});
       const updates = {};
-      const data = {
-        hackathonId: form.hackathonId,
-        categoryId,
-        id: submissionId,
-        members: members,
-      };
-      console.log(data)
-      updates[`/submission/${submissionId}`] = data;
-      database.ref().update(updates, (e) => console.log(e));
+      const image = dataURItoBlob(form.croppedImage);
+      const uploadTask = storage.ref().child(`images/${submissionId}.png`).put(image);
+      uploadTask.on('state_changed', (snapshot) => {
+
+      }, (error) => {
+
+      }, async() => {
+        const downloadURL = uploadTask.snapshot.downloadURL;
+        console.log(downloadURL)
+        const data = {
+          hackathonId: form.hackathonId,
+          categoryId,
+          id: submissionId,
+          members,
+          image: downloadURL,
+        };
+        updates[`/submissions/${submissionId}`] = data;
+        await database.ref().update(updates, (e) => console.log(e));
+          // stop loading indicator
+      });
     });
   },
-};
-
-const validateForm = (state: any, form: string) => (dispatch) => {
-  // get form state
-  const currentForm = state[form];
-  // get field keys
-  const fields = Object.keys(currentForm);
-  // check if all fields are valid,
-  // dispatch error at first invalid value
-  const notValid = fields.some((field) => {
-    if (validations[form].hasOwnProperty(field)) {
-      const value = currentForm[field];
-      const { valid, message } = validations[form][field](value);
-      if (!valid) {
-        dispatch(formError(form, field, message));
-      }
-      return message;
-    }
-    return false;
-  });
-  if (!notValid) {
-    submitForms[form](currentForm);
-  }
 };
 
 const validateField = (form: string, prop: string, value: string) => (dispatch) => {
@@ -105,6 +103,29 @@ const validateField = (form: string, prop: string, value: string) => (dispatch) 
     dispatch(updateForm(form, prop, value));
   } else {
     dispatch(formError(form, prop, message));
+  }
+};
+
+const validateForm = (state: any, form: string) => (dispatch) => {
+  // get form state
+  const currentForm = state[form];
+  // get field keys
+  const fields = Object.keys(currentForm);
+  const isValid = fields.every((field) => {
+    if (validations[form].hasOwnProperty(field)) {
+      // check if all fields are valid
+      const value = currentForm[field];
+      const { valid, message } = validations[form][field](value);
+      if (!valid) {
+        // dispatch error at first invalid value
+        dispatch(formError(form, field, message));
+      }
+      return valid;
+    }
+    return true;
+  });
+  if (isValid) {
+    submitForms[form](currentForm);
   }
 };
 

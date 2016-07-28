@@ -5,10 +5,14 @@ import React from 'react';
 import {
   Tabs, Tab, Card, CardActions,
   CardMedia, CardHeader, FlatButton,
+  CardText,
 } from 'material-ui';
 
 // components
 import { Row, Column } from '../grid/grid';
+
+// image
+import projectPlaceholder from './grey-placeholder.jpg';
 
 // css
 import responsive from '../../css/responsive.css';
@@ -91,8 +95,12 @@ const SubmissionCard = (props: CardProps) => {
       <Card style={style.card}>
         <CardHeader title={"test"} />
         <CardMedia mediaStyle={style.cardMedia}>
-          <img className={responsive.imgResponsive} src={'http://placehold.it/350x350'} alt={"test"} />
+          <img className={responsive.imgResponsive} src={props.submission.image} alt={"test"} />
         </CardMedia>
+        <CardText>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Donec mattis pretium massa.
+    </CardText>
         <CardActions>
           {voteButton}
         </CardActions>
@@ -133,7 +141,8 @@ const style = {
     borderStyle: 'solid',
   },
   cardMedia: {
-    height: 300,
+    backgroundImage: `url(${projectPlaceholder})`,
+    height: 358,
   },
   tabContainer: {
     borderTopLeftRadius: 3,
