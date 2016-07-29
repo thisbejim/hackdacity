@@ -2,7 +2,7 @@
   "rules": {
     "admins": {
       ".read": "auth != null",
-      ".write": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)"
     },
     "alumni": {
       ".read": "true",
@@ -15,30 +15,30 @@
       ".indexOn": ["date"],
       ".read": "root.child('admins').hasChild(auth.uid)",
       "$user_id": {
-        ".write": "root.child('admins').hasChild(auth.uid) || $user_id === auth.uid",
+        ".write": "root.child('admins').hasChild(auth.uid) || $user_id === auth.uid"
       }
     },
     "currentHackathon": {
       ".read": "true",
-      ".write": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)"
     },
     "hackathons": {
       ".read": "true",
-      ".write": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)"
     },
     "categories": {
       ".indexOn": ["hackathonId"],
       ".read": "true",
-      ".write": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)"
     },
     "prizes": {
       ".indexOn": ["hackathonId"],
       ".read": "true",
-      ".write": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)"
     },
     "slack": {
       ".read": "root.child('admins').hasChild(auth.uid)",
-      ".write": "root.child('admins').hasChild(auth.uid)",
+      ".write": "root.child('admins').hasChild(auth.uid)"
     },
     "submissions": {
       ".read": "true",
@@ -70,7 +70,7 @@
           "$user_id": {
             ".validate": "$user_id === auth.uid && newData.val() == true || newData.val() == null"
           }
-        },
+        }
       }
     }
   }

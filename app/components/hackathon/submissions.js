@@ -94,8 +94,8 @@ const SubmissionCard = (props: CardProps) => {
     <Column key={props.index} md={4} sm={6}>
       <Card style={style.card}>
         <CardHeader title={props.submission.title} />
-        <CardMedia mediaStyle={style.cardMedia}>
-          <img className={responsive.imgResponsive} src={props.submission.image} alt={"test"} />
+        <CardMedia style={style.cardMedia}>
+            <img className={responsive.imgResponsive} src={props.submission.image} alt={props.submission.title} />
         </CardMedia>
         <CardText>
           {props.submission.description}
@@ -141,7 +141,12 @@ const style = {
   },
   cardMedia: {
     backgroundImage: `url(${projectPlaceholder})`,
-    height: 358,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    position: 'relative',
+    paddingBottom: '100%',
+    height: 0,
+    overflow: 'hidden',
   },
   tabContainer: {
     borderTopLeftRadius: 3,

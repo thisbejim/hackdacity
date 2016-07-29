@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "hackdacity"
+    "default": "hackdacity",
+    "staging": "hackdacity-staging",
+    "production": "hackdacity"
   }
 }
