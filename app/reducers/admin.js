@@ -13,6 +13,7 @@ const initialState: Admin = {
   editDisabled: true,
   categories: [],
   prizes: [],
+  page: 'dashboard',
 };
 
 export const admin = (state : Admin = initialState, action: Action): Admin => {
@@ -20,6 +21,9 @@ export const admin = (state : Admin = initialState, action: Action): Admin => {
     // approve
     case 'ADD_APPLICANTS':
       return Object.assign({}, state, { applicants: action.applicants });
+
+    case 'CHANGE_ADMIN_PAGE':
+      return Object.assign({}, state, { page: action.page });
 
     case 'UPDATE_SLACK_CREDENTIALS':
       return Object.assign({}, state, { slack: { token: action.token } });
@@ -99,6 +103,7 @@ export const admin = (state : Admin = initialState, action: Action): Admin => {
           name,
         };
       });
+      console.log(categories)
       return Object.assign({}, state, { categories });
     }
 

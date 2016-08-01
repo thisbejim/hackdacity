@@ -26,21 +26,27 @@ export const RightNavLoggedIn = (props: Props) => {
   let admin;
   let adminMobile;
   if (props.state.admin) {
-    admin = <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin/dashboard')} />;
+    admin = <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin')} />;
     adminMobile = (
       <MenuItem
         primaryText="Admin"
-        onTouchTap={() => browserHistory.push('/admin/dashboard')}
+        onTouchTap={() => browserHistory.push('/admin')}
       />
     );
+  }
+  let submit;
+  let submitMobile;
+  console.log(props)
+  if (props.state.status === 'verified') {
+    submit = <FlatButton label="Submit" onTouchTap={() => browserHistory.push('/submit')} />;
+    submitMobile = <MenuItem primaryText="Submit" onTouchTap={() => browserHistory.push('/submit')} />;
   }
   return (
     <Row>
       {/* desktop/iPad */}
       <Column md={12} hiddenXs>
         {admin}
-        <FlatButton label="Approve" onTouchTap={() => browserHistory.push('/admin/approve')} />
-        <FlatButton label="Submit" onTouchTap={() => browserHistory.push('/submit')} />
+        {submit}
         <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules')} />
         <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes')} />
         <IconMenu
@@ -67,7 +73,7 @@ export const RightNavLoggedIn = (props: Props) => {
           anchorOrigin={style.target}
         >
           {adminMobile}
-          <MenuItem primaryText="Submit" onTouchTap={() => browserHistory.push('/submit')} />
+          {submitMobile}
           <MenuItem primaryText="Rules" onTouchTap={() => browserHistory.push('/rules')} />
           <MenuItem primaryText="Prizes" onTouchTap={() => browserHistory.push('/prizes')} />
           <MenuItem primaryText="Sign out" onTouchTap={() => props.dispatch(signOut())} />

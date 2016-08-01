@@ -85,10 +85,7 @@ ReactDOM.render(
         <Route path="rules" component={Rules} />
         <Route path="prizes" component={Prizes} />
         <Route path="submit" component={Submit} />
-        <Route path="admin" component={Admin}>
-          <Route path="dashboard" component={Dashboard} />
-          <Route path="approve" component={Approve} />
-        </Route>
+        <Route path="admin" component={Admin} />
       </Route>
     </Router>
   </Provider>,

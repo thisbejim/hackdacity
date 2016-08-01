@@ -5,14 +5,23 @@
       ".write": "root.child('admins').hasChild(auth.uid)"
     },
     "alumni": {
-      ".read": "true",
-    	".indexOn": ["userName"],
-      "$user_id": {
-      	".write": "root.child('admins').hasChild(auth.uid) || $user_id === auth.uid && data.exists()"
+      ".read": "root.child('admins').hasChild(auth.uid)",
+      "$userId": {
+      	".write": "root.child('admins').hasChild(auth.uid) || $userId === auth.uid && data.exists()"
        }
     },
+    "users": {
+      ".read": "true",
+      ".indexOn": ["userName"],
+      "$userId": {
+        ".write": "root.child('admins').hasChild(auth.uid) || $userId === auth.uid",
+        "status": {
+          ".validate": "newData.val() == 'unverified' || root.child('admins').hasChild(auth.uid)"
+        }
+      }
+    },
     "applied": {
-      ".indexOn": ["date"],
+      ".indexOn": ["signUpDate"],
       ".read": "root.child('admins').hasChild(auth.uid)",
       "$user_id": {
         ".write": "root.child('admins').hasChild(auth.uid) || $user_id === auth.uid"
@@ -67,8 +76,8 @@
           ".validate": "newData.val() != null"
         },
         "votes": {
-          "$user_id": {
-            ".validate": "$user_id === auth.uid && newData.val() == true || newData.val() == null"
+          "$userId": {
+            ".validate": "$userId === auth.uid && newData.val() == true || newData.val() == null"
           }
         }
       }

@@ -10,8 +10,8 @@ import {
 
 // actions
 import {
-  toggleAuthDialogOpen, toggleAuthPage, signIn,
-  signUp, updateDialogForm,
+  toggleAuthDialogOpen, toggleAuthPage, validateField,
+  validateForm,
 } from '../../actions/actions';
 
 // types
@@ -30,23 +30,17 @@ export const AuthDialog = (props: Props) => {
   const dispatch = props.dispatch;
   const dialog = props.state.dialogs.auth;
   const loading = dialog.loading ? <LinearProgress mode="indeterminate" /> : null;
+
   const page = dialog.page === 'signIn'
   ?
     <SignInForm
       dispatch={dispatch}
-      name={dialog.name}
-      email={dialog.email}
-      password={dialog.password}
-      error={dialog.error}
+      form={props.state.forms.signIn}
     />
   :
     <SignUpForm
       dispatch={dispatch}
-      name={dialog.name}
-      userName={dialog.userName}
-      email={dialog.email}
-      password={dialog.password}
-      error={dialog.error}
+      form={props.state.forms.signUp}
     />;
 
   const actions = dialog.page === 'signIn'
@@ -54,14 +48,14 @@ export const AuthDialog = (props: Props) => {
       <FlatButton
         key="openRegisterPageBtn"
         style={style.actionButton}
-        label="Create an account"
+        label="Join"
         primary
         onTouchTap={() => dispatch(toggleAuthPage())}
       />,
       <FlatButton
         style={style.actionButton}
         label="Sign in"
-        onTouchTap={() => dispatch(signIn(dialog.email, dialog.password))}
+        onTouchTap={() => dispatch(validateForm(props.state.forms, 'signIn'))}
       />,
       loading,
     ]
@@ -76,7 +70,7 @@ export const AuthDialog = (props: Props) => {
       <FlatButton
         style={style.actionButton}
         label="Sign Up"
-        onTouchTap={() => dispatch(signUp(dialog.name, dialog.userName, dialog.email, dialog.password))}
+        onTouchTap={() => dispatch(validateForm(props.state.forms, 'signUp'))}
       />,
       loading,
     ];
@@ -115,10 +109,10 @@ const SignInForm = (props: FormProps) =>
       hintText="Email"
       floatingLabelText="Email"
       fullWidth
-      value={props.email}
       onChange={(evt, value) => props.dispatch(
-        updateDialogForm('auth', 'email', value)
+        validateField('signIn', 'email', value)
       )}
+      errorText={props.form.errors.email}
     />
     <br />
     <TextField
@@ -126,11 +120,10 @@ const SignInForm = (props: FormProps) =>
       hintText="Password"
       floatingLabelText="Password"
       fullWidth
-      value={props.password}
       onChange={(evt, value) => props.dispatch(
-        updateDialogForm('auth', 'password', value)
+        validateField('signIn', 'password', value)
       )}
-      errorText={props.error}
+      errorText={props.form.errors.password}
     />
   </span>;
 
@@ -141,10 +134,10 @@ const SignUpForm = (props: FormProps) =>
       hintText="Full Name"
       floatingLabelText="Full Name"
       fullWidth
-      value={props.name}
       onChange={(evt, value) => props.dispatch(
-        updateDialogForm('auth', 'name', value)
+        validateField('signUp', 'name', value)
       )}
+      errorText={props.form.errors.name}
     />
     <br />
     <TextField
@@ -152,22 +145,21 @@ const SignUpForm = (props: FormProps) =>
       hintText="User Name"
       floatingLabelText="User Name"
       fullWidth
-      value={props.userName}
       onChange={(evt, value) => props.dispatch(
-        updateDialogForm('auth', 'userName', value)
+        validateField('signUp', 'userName', value)
       )}
-      errorText={props.error}
+      errorText={props.form.errors.userName}
     />
     <br />
     <TextField
       key="Email"
-      hintText="Email"
-      floatingLabelText="Email"
+      hintText="Udacity Email"
+      floatingLabelText="Udacity Email"
       fullWidth
-      value={props.email}
       onChange={(evt, value) => props.dispatch(
-        updateDialogForm('auth', 'email', value)
+        validateField('signUp', 'email', value)
       )}
+      errorText={props.form.errors.email}
     />
     <br />
     <TextField
@@ -175,11 +167,10 @@ const SignUpForm = (props: FormProps) =>
       hintText="Password"
       floatingLabelText="Password"
       fullWidth
-      value={props.password}
       onChange={(evt, value) => props.dispatch(
-        updateDialogForm('auth', 'password', value)
+        validateField('signUp', 'password', value)
       )}
-      errorText={props.error}
+      errorText={props.form.errors.password}
     />
   </span>;
 

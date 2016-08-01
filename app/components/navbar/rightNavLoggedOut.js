@@ -23,23 +23,11 @@ type Props = {
 }
 
 export const RightNavLoggedOut = (props: Props) => {
-  let admin;
-  let adminMobile;
-  if (props.state.admin) {
-    admin = <FlatButton label="Admin" onTouchTap={() => browserHistory.push('/admin/dashboard')} />;
-    adminMobile = (
-      <MenuItem
-        primaryText="Admin"
-        onTouchTap={() => browserHistory.push('/admin/dashboard')}
-      />
-    );
-  }
   return (
     <Row>
       {/* desktop/iPad */}
       <Column md={12} hiddenXs>
         <p>
-          {admin}
           <FlatButton label="Rules" onTouchTap={() => browserHistory.push('/rules')} />
           <FlatButton label="Prizes" onTouchTap={() => browserHistory.push('/prizes')} />
           <FlatButton label="Sign In" onTouchTap={() => props.dispatch(toggleAuthDialogOpen())} />
@@ -56,7 +44,6 @@ export const RightNavLoggedOut = (props: Props) => {
           targetOrigin={style.target}
           anchorOrigin={style.target}
         >
-          {adminMobile}
           <MenuItem primaryText="Rules" onTouchTap={() => browserHistory.push('/rules')} />
           <MenuItem primaryText="Prizes" onTouchTap={() => browserHistory.push('/prizes')} />
           <MenuItem

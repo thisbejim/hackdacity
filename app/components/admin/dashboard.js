@@ -16,15 +16,9 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 // actions
 import {
-  getHackathons,
-  toggleEditHackathon,
-  deletePrize,
-  deleteCategory,
-  addPrize,
-  addPrizeCategory,
-  saveHackathon,
-  updatePrize,
-  updateCategory,
+  getHackathons, toggleEditHackathon, deletePrize,
+  deleteCategory, addPrize, addPrizeCategory,
+  saveHackathon, updatePrize, updateCategory,
   updateDate,
 } from '../../actions/actions';
 
@@ -83,11 +77,15 @@ export class Dashboard extends React.Component {
             key={prize.id}
             primaryText={
               <TextField
+                key={`field${prize.id}`}
                 id={prize.id}
                 fullWidth
                 disabled={state.editDisabled}
                 defaultValue={prize.text}
-                onChange={(event, value) => dispatch(updatePrize(prize.id, value))}
+                onChange={(event, value) => {
+                  event.stopPropagation();
+                  dispatch(updatePrize(prize.id, value));
+                }}
               />
             }
             rightIcon={
@@ -115,11 +113,15 @@ export class Dashboard extends React.Component {
                     }
                     primaryText={
                       <TextField
+                        key={`category${category.id}`}
                         id={category.id}
                         fullWidth
                         disabled={state.editDisabled}
                         defaultValue={category.name}
-                        onChange={(event, value) => dispatch(updateCategory(category.id, value))}
+                        onChange={(event, value) => {
+                          event.stopPropagation();
+                          dispatch(updateCategory(category.id, value));
+                        }}
                       />
                     }
                   />
@@ -164,7 +166,6 @@ export class Dashboard extends React.Component {
       </div>;
     return (
       <span>
-        <h1>Dashboard</h1>
         <h2>current hackathon</h2>
         <SelectField value={state.selected}>
           {selectFields}

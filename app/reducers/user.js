@@ -8,15 +8,21 @@ const initialState = {
   uid: null,
   name: null,
   userName: null,
+  status: null,
 };
 
 export const user = (state : User = initialState, action: Action): User => {
   switch (action.type) {
-    case 'SIGNED_IN':
+    case 'SIGNED_IN': {
+      const { uid, name, userName, status } = action;
       return Object.assign({}, state, {
         signedIn: true,
-        uid: action.uid,
+        uid,
+        name,
+        userName,
+        status,
       });
+    }
     case 'ADD_USER_DETAILS':
       return Object.assign({}, state, {
         name: action.name,

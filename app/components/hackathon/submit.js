@@ -25,7 +25,7 @@ import responsive from '../../css/responsive.css';
 import {
   validateForm, validateField, updateForm,
   addToFormArray, processFormImage, autoComplete,
-  updateFormArray,
+  updateFormArray, removeFromFormArray,
 } from '../../actions/actions';
 
 export class Submit extends React.Component {
@@ -34,8 +34,23 @@ export class Submit extends React.Component {
     const dispatch = this.props.dispatch;
     const hackathon = this.props.state.hackathon;
     const form = this.props.state.forms.submit;
-    const checkboxes = this.props.state.hackathon.categories.map(
-      (category, index) => <Checkbox key={index} label={category.name} />
+    const categories = hackathon.categories;
+    const checkboxes = categories.map(
+      (category, index) => (
+        <Checkbox
+          key={index}
+          checked={form.categories.some((id) => id === category.id)}
+          label={category.name}
+          onCheck={(event, isChecked) => {
+            console.log(isChecked)
+            if (isChecked) {
+              dispatch(addToFormArray('submit', 'categories', category.id, categories.length));
+            } else {
+              dispatch(removeFromFormArray(index, 'submit', 'categories'));
+            }
+          }}
+        />
+      )
     );
     const members = form.members.map((member, index) => {
       if (index === 0) {
@@ -57,7 +72,6 @@ export class Submit extends React.Component {
         <AutoComplete
           key={index}
           hintText="Username"
-          filter={AutoComplete.caseInsensitiveFilter}
           dataSource={this.props.state.forms.autoComplete.members}
           onUpdateInput={(value) => dispatch(autoComplete('members', value))}
           onNewRequest={(value, requestIndex) => dispatch(
@@ -83,7 +97,9 @@ export class Submit extends React.Component {
             <Column md={12}>
               {image}
               {imgButton}
-              <p className={responsive.textCenter}>{form.errors.croppedImage}</p>
+              <p className={responsive.textCenter} style={style.warning}>
+                {form.errors.croppedImage}
+              </p>
             </Column>
           </Row>
           <Row>
@@ -104,8 +120,11 @@ export class Submit extends React.Component {
               <TextField
                 key="description"
                 hintText="Description"
+                multiLine
+                rows={2}
+                rowsMax={4}
                 fullWidth
-                errorText={form.errors.title}
+                errorText={form.errors.description}
                 onChange={(event) => dispatch(validateField('submit', 'description', event.target.value))}
               />
             </Column>
@@ -139,6 +158,7 @@ export class Submit extends React.Component {
             <Column md={12}>
               <p>Which prize categories do you wish to be considered for?</p>
               {checkboxes}
+              <span style={style.warning}>{form.errors.categories}</span>
             </Column>
           </Row>
           <Row>
@@ -246,5 +266,9 @@ const style = {
     display: 'block',
     maxWidth: '100%',
     height: 'auto',
+  },
+  warning: {
+    color: '#f44336',
+    fontSize: 12,
   },
 };

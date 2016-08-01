@@ -1,7 +1,7 @@
 // @flow
 
 // firebase
-import { auth, database, firebaseError } from './firebase';
+import { auth, database } from './firebase';
 
 // types
 import type { Action, ThunkAction } from './types';
@@ -10,11 +10,12 @@ import type { Action, ThunkAction } from './types';
 import { openSnackBar } from './navbar';
 import { isAdmin } from './admin';
 
-const signedIn = (uid: string, name: ?string, userName: ?string): Action => ({
+const signedIn = (uid: string, name: string, userName: string, status: string): Action => ({
   type: 'SIGNED_IN',
   uid,
   name,
   userName,
+  status,
 });
 
 // Authentication handler
@@ -22,14 +23,9 @@ const checkAuth = (): ThunkAction => (dispatch): void => {
   auth.onAuthStateChanged(async(user) => {
     if (user) {
       // User is signed in.
-      const d = await database.ref('alumni').child(user.uid).once('value');
+      const d = await database.ref('users').child(user.uid).once('value');
       const details = d.val();
-      console.log(details)
-      if (details) {
-        dispatch(signedIn(user.uid, details.name, details.userName));
-      } else {
-        dispatch(signedIn(user.uid));
-      }
+      dispatch(signedIn(user.uid, details.name, details.userName, details.status));
       dispatch(openSnackBar('Signed In'));
       dispatch(isAdmin(user.uid));
     }
@@ -66,40 +62,6 @@ const signInError = (error: string): Action => ({
   error,
 });
 
-const signIn = (email: string, password: string): ThunkAction => async(dispatch): Promise<void> => {
-  try {
-    dispatch(authDialogLoadingOn());
-    await auth.signInWithEmailAndPassword(email, password);
-    dispatch(toggleAuthDialogOpen());
-  } catch (e) {
-    dispatch(signInError(firebaseError(e)));
-  }
-};
-
-// Sign up
-const signUp = (
-  name: string, userName: string, email: string, password: string
-): ThunkAction => async(dispatch): Promise<void> => {
-  try {
-    dispatch(authDialogLoadingOn());
-    const user = await auth.createUserWithEmailAndPassword(email, password);
-    await user.updateProfile({ displayName: name });
-    const uid = user.uid;
-    // add
-    await database.ref('applied').child(uid).set({
-      uid,
-      name,
-      userName,
-      email,
-      date: new Date().getTime(),
-    });
-    dispatch(toggleAuthDialogOpen());
-  } catch (e) {
-    dispatch(signInError(firebaseError(e)));
-  }
-};
-
-
 // Sign out
 const signedOut = (): Action => ({
   type: 'SIGNED_OUT',
@@ -113,6 +75,5 @@ const signOut = (): ThunkAction => async(dispatch): Promise<void> => {
 module.exports = {
   checkAuth, toggleAuthDialogOpen, authDialogLoadingOn,
   authDialogLoadingOff, toggleAuthPage, signInError,
-  signedIn, signIn, signUp,
-  signedOut, signOut, updateDialogForm,
+  signedIn, signedOut, signOut, updateDialogForm,
 };

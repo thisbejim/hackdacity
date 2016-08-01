@@ -18,10 +18,11 @@
     "babel/array-bracket-spacing": 1,
     "babel/object-shorthand": 1,
     "babel/arrow-parens": 1,
-    "babel/no-await-in-loop": 1,
+    "babel/no-await-in-loop": 0,
     "babel/func-params-comma-dangle": 1,
     "no-param-reassign": ["error", { "props": false }],
     "no-use-before-define": 0,
     "react/sort-comp": 0,
+    "newline-per-chained-call": 0,
   }
 }

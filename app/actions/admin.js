@@ -21,6 +21,11 @@ const updateAdmin = (isAdmin: boolean): Action => ({
   isAdmin,
 });
 
+const changeAdminPage = (page: string): Action => ({
+  type: 'CHANGE_ADMIN_PAGE',
+  page,
+});
+
 // Slack
 const addUserToSlack = async(email: string, token: string): Promise<void> => {
   const formData = new FormData();
@@ -60,13 +65,8 @@ const validApplicant = (
     console.log("valid", uid, name, userName, email)
     await Promise.all([
       database.ref('applied').child(uid).remove(),
-      database.ref('alumni').child(uid).set(
-        {
-          name,
-          uid,
-          userName: userName.toLowerCase(),
-        }
-      ),
+      database.ref('alumni').child(uid).set(true),
+      database.ref('users').child(uid).update({ status: 'verified' }),
       addUserToSlack(email, token),
     ]);
   } catch (e) {
@@ -81,7 +81,7 @@ const addApplicants = (applicants: Applicants): Action => ({
 
 const getApplicants = (): ThunkAction => (dispatch): void => {
   dispatch(navBarLoadingOn());
-  database.ref('applied').orderByChild('date').on('value', (snapshot) => {
+  database.ref('applied').orderByChild('signUpDate').on('value', (snapshot) => {
     const snapshotVal = snapshot.val();
     if (snapshotVal) {
       const applicants = Object.values(snapshotVal);
@@ -174,23 +174,12 @@ const deleteCategory = (categoryId: string): Action => ({
   categoryId,
 });
 
-const updateDate = (id: string, date: Date, dateType: string): Action => {
-  return (
-  {
-    type: 'UPDATE_DATE',
-    id,
-    date: date.getTime(),
-    dateType,
-  }
-);
-};
-
-// const updateDate = (id: string, date: Date, dateType: string): Action => ({
-//   type: 'UPDATE_DATE',
-//   id,
-//   date: String(date.getTime()),
-//   dateType,
-// });
+const updateDate = (id: string, date: Date, dateType: string): Action => ({
+  type: 'UPDATE_DATE',
+  id,
+  date: date.getTime(),
+  dateType,
+});
 
 /**
  * Reduce prizes, prize categories, and hackathons to objects
@@ -234,5 +223,5 @@ module.exports = {
   addPrize, updatePrize, updateCategory,
   addPrizeCategory, deleteCategory, updateDate,
   saveHackathon, addUserToSlack, updateSlackCredentials,
-  getSlackCredentials,
+  getSlackCredentials, changeAdminPage,
 };

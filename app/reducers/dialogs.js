@@ -8,11 +8,6 @@ const initialState = {
     page: 'login',
     open: false,
     loading: false,
-    error: null,
-    name: '',
-    userName: '',
-    email: '',
-    password: '',
   },
 };
 

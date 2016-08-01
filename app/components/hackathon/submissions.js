@@ -10,9 +10,10 @@ import {
 
 // components
 import { Row, Column } from '../grid/grid';
+import MediaQuery from 'react-responsive';
 
 // image
-import projectPlaceholder from './grey-placeholder.jpg';
+import submissionPlaceholder from './grey-placeholder.jpg';
 
 // css
 import responsive from '../../css/responsive.css';
@@ -57,11 +58,13 @@ export const Submissions = (props: Props) => {
       ? subs
       : <p style={style.noSubmissions}>No submissions in this category yet!</p>;
     return (
-      <Tab key={category.id} label={category.name} value={category.id}>
-        <Row>
-          {submissions}
-        </Row>
-      </Tab>
+      <MediaQuery query='(max-width: 1224px)'>
+        <Tab key={category.id} label={category.name} value={category.id}>
+          <Row>
+            {submissions}
+          </Row>
+        </Tab>
+      </MediaQuery>
     );
   });
   return (
@@ -95,9 +98,13 @@ const SubmissionCard = (props: CardProps) => {
       <Card style={style.card}>
         <CardHeader title={props.submission.title} />
         <CardMedia style={style.cardMedia}>
-            <img className={responsive.imgResponsive} src={props.submission.image} alt={props.submission.title} />
+          <img
+            className={responsive.imgResponsive}
+            src={props.submission.image}
+            alt={props.submission.title}
+          />
         </CardMedia>
-        <CardText>
+        <CardText style={style.cardText}>
           {props.submission.description}
         </CardText>
         <CardActions>
@@ -140,13 +147,17 @@ const style = {
     borderStyle: 'solid',
   },
   cardMedia: {
-    backgroundImage: `url(${projectPlaceholder})`,
+    backgroundImage: `url(${submissionPlaceholder})`,
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
     position: 'relative',
     paddingBottom: '100%',
     height: 0,
     overflow: 'hidden',
+  },
+  cardText: {
+    wordWrap: 'break-word',
+    height: 70,
   },
   tabContainer: {
     borderTopLeftRadius: 3,

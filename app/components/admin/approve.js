@@ -44,16 +44,24 @@ export class Approve extends React.Component {
           secondaryText={applicant.name}
           leftCheckbox={
             <Checkbox
-              onCheck={() => dispatch(
-                validApplicant(
-                  applicant.uid, applicant.name, applicant.userName,
-                  applicant.email, admin.slack.token
-                )
-              )}
+              onCheck={(event) => {
+                event.stopPropagation();
+                dispatch(
+                  validApplicant(
+                    applicant.uid, applicant.name, applicant.userName,
+                    applicant.email, admin.slack.token
+                  )
+                );
+              }}
             />
           }
           rightIcon={
-            <ContentClear onClick={() => dispatch(invalidApplicant(applicant.id))} />
+            <ContentClear
+              onClick={(event) => {
+                event.stopPropagation();
+                dispatch(invalidApplicant(applicant.id));
+              }}
+            />
           }
         />
         <Divider inset />

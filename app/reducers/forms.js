@@ -12,11 +12,32 @@ const initialState = {
     selectedImage: null,
     croppedImage: null,
     hackathonId: null,
-    categories: ['-KN0slKjWawdawdaw'],
+    categories: [],
     errors: {
       title: '',
       github: '',
       croppedImage: '',
+      categories: '',
+    },
+  },
+  signIn: {
+    email: null,
+    password: null,
+    errors: {
+      email: '',
+      password: '',
+    },
+  },
+  signUp: {
+    name: null,
+    userName: null,
+    email: null,
+    password: null,
+    errors: {
+      name: '',
+      userName: '',
+      email: '',
+      password: '',
     },
   },
   autoComplete: {
@@ -32,25 +53,36 @@ export const forms = (state : Forms = initialState, action: Action): Forms => {
       return Object.assign({}, state, { submit: form });
     }
     case 'UPDATE_FORM': {
-      const value = { [action.prop]: action.value };
-      const form = Object.assign({}, state[action.form], value);
-      return Object.assign({}, state, { [action.form]: form });
+      const { form, prop, value } = action;
+      const field = { [prop]: value };
+      const updated = Object.assign({}, state[form], field);
+      return Object.assign({}, state, { [form]: updated });
     }
     case 'ADD_TO_FORM_ARRAY': {
-      if (state[action.form][action.prop].length < action.maxLength) {
-        const current = state[action.form][action.prop];
-        const value = [
+      const { form, prop, value, maxLength } = action;
+      if (state[form][prop].length < maxLength) {
+        const current = state[form][prop];
+        const field = [
           ...current,
-          action.value,
+          value,
         ];
-        const form = Object.assign({}, state[action.form], { [action.prop]: value });
-        return Object.assign({}, state, { [action.form]: form });
+        const updated = Object.assign({}, state[form], { [prop]: field });
+        return Object.assign({}, state, { [form]: updated });
       }
       return state;
     }
+    case 'REMOVE_FROM_FORM_ARRAY': {
+      const { index, form, prop } = action;
+      const value = state[form][prop];
+      const field = value.slice(0, index).concat(
+        value.slice(index + 1)
+      );
+      const updated = Object.assign({}, state[form], { [prop]: field });
+      return Object.assign({}, state, { [form]: updated });
+    }
     case 'UPDATE_FORM_ARRAY': {
       const { index, form, prop, value } = action;
-      const items = state[form][prop].map((item, i) => {
+      const field = state[form][prop].map((item, i) => {
         if (index !== i) {
           return item;
         }
@@ -59,20 +91,22 @@ export const forms = (state : Forms = initialState, action: Action): Forms => {
           ...value,
         };
       });
-      const newState = Object.assign({}, state[form], { [prop]: items });
-      return Object.assign({}, state, { [action.form]: newState });
+      const updated = Object.assign({}, state[form], { [prop]: field });
+      return Object.assign({}, state, { [action.form]: updated });
     }
     case 'FORM_ERROR': {
-      const value = { [action.prop]: action.error };
-      const error = Object.assign({}, state[action.form].errors, value);
-      const form = Object.assign({}, state[action.form], { errors: error });
-      return Object.assign({}, state, { [action.form]: form });
+      const { form, prop, error } = action;
+      const value = { [prop]: error };
+      const field = Object.assign({}, state[form].errors, value);
+      const updated = Object.assign({}, state[form], { errors: field });
+      return Object.assign({}, state, { [form]: updated });
     }
     case 'CLEAR_FORM_ERROR': {
-      const value = { [action.prop]: '' };
-      const error = Object.assign({}, state[action.form].errors, value);
-      const form = Object.assign({}, state[action.form], { errors: error });
-      return Object.assign({}, state, { [action.form]: form });
+      const { form, prop } = action;
+      const value = { [prop]: '' };
+      const field = Object.assign({}, state[form].errors, value);
+      const updated = Object.assign({}, state[form], { errors: field });
+      return Object.assign({}, state, { [form]: updated });
     }
     case 'SIGNED_IN': {
       const { uid, userName } = action;
