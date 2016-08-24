@@ -58,13 +58,11 @@ export const Submissions = (props: Props) => {
       ? subs
       : <p style={style.noSubmissions}>No submissions in this category yet!</p>;
     return (
-      <MediaQuery query='(max-width: 1224px)'>
-        <Tab key={category.id} label={category.name} value={category.id}>
-          <Row>
-            {submissions}
-          </Row>
-        </Tab>
-      </MediaQuery>
+      <Tab key={category.id} label={category.name} value={category.id}>
+        <Row>
+          {submissions}
+        </Row>
+      </Tab>
     );
   });
   return (

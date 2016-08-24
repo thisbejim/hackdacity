@@ -103,7 +103,6 @@ export const admin = (state : Admin = initialState, action: Action): Admin => {
           name,
         };
       });
-      console.log(categories)
       return Object.assign({}, state, { categories });
     }
 
